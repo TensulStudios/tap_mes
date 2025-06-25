@@ -1,5 +1,5 @@
 {
   "title": "2048",
-  "description": "2048 is a game about shifting tiles to combine them to make bigger tiles!",
+  "description": "Use your arrow keys to move the tiles. When two tiles with the same number touch, they merge into one!",
   "image": "games/2048/image.png"
 }
