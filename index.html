@@ -405,7 +405,7 @@
     const containerRect = container.getBoundingClientRect();
     const cardRect = selectedCard.getBoundingClientRect();
     const scrollOffset = cardRect.left - containerRect.left - (container.clientWidth / 2) + (cardRect.width / 2);
-    container.scrollBy({ left: scrollOffset, behavior: 'smooth' });
+    container.scrollBy({ left: scrollOffset });
     }
   }
 
