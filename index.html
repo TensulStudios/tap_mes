@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
             background: #0a0a0a;
             background-image: 
                 radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
@@ -55,7 +55,7 @@
             font-size: 1.5rem;
             margin-bottom: 3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background: white;
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -170,7 +170,6 @@
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 1rem;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
@@ -186,7 +185,7 @@
         .switch-label {
             right: 5px;
             text-align: center;
-            padding: 5px 5px 15px 15px;
+            padding-top: 5px;
             font-size: 1.15rem;
             color: rgb(255, 255, 255);
             font-weight:900;
@@ -325,18 +324,20 @@
             const description = game.description || 'No description available';
             const imageSrc = game.image || '';
             const creator = game.creator || 'Tames';
+            const from = game.from || 'Tames Made';
 
             card.innerHTML = `
                 ${imageSrc ? 
                     `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
-                    `<div class="game-placeholder">${title}</div>`
+                    `<div class="game-placeholder">No image available</div>`
                 }
                 <div class="game-content">
                     <div>
                         <h3 class="game-title">${title}</h3>
                         <p class="game-description">${description}</p>
                     </div>
-                    <div class="switch-label">by ${creator}</div>
+                    <div class="switch-label" style="font-size:17px;padding-bottom: 0px;padding-top: 0px;">${creator}<div class="switch-label" style="font-size:10px;padding-bottom: 0px;padding-top: 0px;">${from}</div></div>
+                    
                 </div>
             `;
 

@@ -1,6 +1,7 @@
 {
   "title": "EaglerCraftX",
-  "description": "EaglerCraft is a web version of Minecraft, all credits go to <a href='https://eaglercraft.com/'>https://eaglercraft.com/</a>.",
+  "description": "EaglerCraft is a free web version of Minecraft, with working multiplayer.",
   "image": "games/minecraft/image.png",
-  "creator": "Lax1dude"
+  "creator": "Lax1dude",
+  "from": "eaglercraft.com"
 }
