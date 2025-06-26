@@ -256,8 +256,10 @@
       display: flex;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding:10rem;
+      padding:28em;
+      
       width: 100%;
+      height:100%;
       align-items: center;
       mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
@@ -269,6 +271,7 @@
       transition: all 0.5s ease;
       background: #000;
       box-shadow: 0 0 2px #ffffff;
+      outline: solid;
     }
 
     .game-card.selected {
@@ -397,8 +400,13 @@
     playSound("select.mp3")
 
     const selectedCard = gameCards[selectedIndex]?.card;
-    if (selectedCard) {
-      selectedCard.scrollIntoView({  inline: 'center', block: 'nearest' });
+    const container = document.querySelector('.games-grid');
+
+    if (selectedCard && container) {
+    const containerRect = container.getBoundingClientRect();
+    const cardRect = selectedCard.getBoundingClientRect();
+    const scrollOffset = cardRect.left - containerRect.left - (container.clientWidth / 2) + (cardRect.width / 2);
+    container.scrollBy({ left: scrollOffset, behavior: 'smooth' });
     }
   }
 
