@@ -276,12 +276,29 @@
       transform: scale(1.25);
       opacity: 1 !important;
     }
+
+    iframe
+    {
+        position:fixed; 
+        top:0; 
+        left:0; 
+        bottom:0; 
+        right:0; 
+        width:100%; 
+        height:100%; 
+        border:none; 
+        margin:0; 
+        padding:0;
+        border-radius: 15px;
+        overflow:hidden; 
+        z-index:999999;
+    }
     </style>
 </head>
 <body>
+    <iframe id="main" hidden></iframe>
   <div class="container">
-    <h1>Tames</h1>
-    <h3><b>Free, Fun and Online games.</b></h3>
+    <h1>TamesOS</h1>
     <div id="loading" class="loading">Reading..</div>
     <div id="games-container" class="games-grid"></div>
     <div id="no-games" class="no-games" style="display: none;">
@@ -300,7 +317,7 @@
       const noGamesElement = document.getElementById('no-games');
 
       try {
-        const commonGameNames = [ 'minecraft', '2048', 'seffects', 'fnf', 'unlikely' ];
+        const commonGameNames = [ 'minecraft', '2048', 'seffects', 'fnf', 'unlikely', 'ktiabatg' ];
         const foundGames = [];
 
         for (const gameName of commonGameNames) {
@@ -376,7 +393,7 @@
 
     const selectedCard = gameCards[selectedIndex]?.card;
     if (selectedCard) {
-      selectedCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      selectedCard.scrollIntoView({  inline: 'center', block: 'nearest' });
     }
   }
 
@@ -387,13 +404,8 @@
     }
 
     function launchGame(game, cardElement) {
-      const overlay = document.getElementById('fullscreen-overlay');
-      overlay.classList.add('active');
-      const gameImage = cardElement.querySelector('.game-image, .game-placeholder');
-      gameImage.classList.add('zoom-fullscreen');
-      setTimeout(() => {
-        window.location.href = game.path + 'index.html';
-      }, 800);
+        document.getElementById("main").attributes.removeNamedItem("hidden")
+        document.getElementById("main").src = "games/" + game.name
     }
 
     document.addEventListener('DOMContentLoaded', discoverGames);
