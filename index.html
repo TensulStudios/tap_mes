@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games Gallery</title>
+    <title>Tames Games</title>
     <style>
         * {
             margin: 0;
@@ -34,7 +34,7 @@
             text-align: center;
             color: #ffffff;
             font-size: 3.5rem;
-            margin-bottom: 3rem;
+            margin-bottom: 1rem;
             font-weight: 700;
             background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
             background-clip: text;
@@ -42,6 +42,20 @@
             -webkit-text-fill-color: transparent;
             text-shadow: none;
             letter-spacing: -1px;
+        }
+
+        h3 {
+            text-align: center;
+            color: #ffffff;
+            font-weight: bolder;
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
         }
 
         .loading {
@@ -66,84 +80,133 @@
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
         .game-card {
-            background: rgba(20, 20, 20, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            border: 2px solid #000000;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             cursor: pointer;
-            backdrop-filter: blur(20px);
             position: relative;
+            height: 450px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
         }
-
-        .game-card::before {
+        .game-card::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .game-card:hover::before {
-            opacity: 1;
+            bottom:0px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 9px;
+            background: linear-gradient(0deg, #000000, transparent);
         }
 
         .game-card:hover {
-            transform: translateY(-12px) scale(1.02);
+            transform: translateY(-8px) rotateX(2deg);
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.2);
+                0 12px 24px rgb(85, 85, 85),
+                inset 0 1px 2px rgba(255, 255, 255, 1);
+        }
+
+        .game-card.launching {
+            z-index: 9999;
         }
 
         .game-image {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: brightness(0.9);
+            border-bottom: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .game-card:hover .game-image {
-            transform: scale(1.08);
-            filter: brightness(1.1);
+        .game-image.zoom-fullscreen,
+        .game-placeholder.zoom-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 10000;
+            border-radius: 0 !important;
+            border-bottom: none !important;
+            object-fit: cover;
         }
 
         .game-content {
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.2);
+            padding: 2.8rem;
+            background: linear-gradient(135deg, #000000ad 15%, #161616ad 100%);
+            height: calc(100% - 200px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .game-content::before {
+            content: ' ';
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            height: px;
+            background: linear-gradient(90deg, transparent, #000000, transparent);
         }
 
         .game-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 0.8rem;
-            text-transform: capitalize;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .game-description {
-            color: rgba(255, 255, 255, 0.75);
-            line-height: 1.7;
-            font-size: 0.95rem;
+            color: #ffffff;
+            line-height: 1.6;
+            font-size: 0.9rem;
             font-weight: 400;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .switch-label {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            text-align: center;
+            padding: 5px 5px 15px 15px;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+            font-weight:100;
+            letter-spacing: 1px;
+        }
+
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 9998;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .fullscreen-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         .no-games {
@@ -169,12 +232,15 @@
         .game-placeholder {
             width: 100%;
             height: 200px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            background: linear-gradient(135deg, #4a90e2, #357abd);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
+            color: white;
             font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid #ccc;
         }
 
         @media (max-width: 768px) {
@@ -191,14 +257,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>tames games</h1>
+        <h1>Tames</h1>
+        <h3><b>Free, Fun and Online games.</b></h3>
         <div id="loading" class="loading">Reading..</div>
         <div id="games-container" class="games-grid"></div>
         <div id="no-games" class="no-games" style="display: none;">
-            No games found in the /games/ directory.<br>
-            Make sure your games are structured as: /games/gamename/index.html and /games/gamename/game.json
+            No games found, this could be due to an internet connection issue or any other issue.
         </div>
     </div>
+
+    <div id="fullscreen-overlay" class="fullscreen-overlay"></div>
 
     <script>
         async function discoverGames() {
@@ -254,34 +322,46 @@
             const title = game.title || game.name || 'Unknown Game';
             const description = game.description || 'No description available';
             const imageSrc = game.image || '';
+            const creator = game.creator || 'Tames';
 
             card.innerHTML = `
                 ${imageSrc ? 
-                    `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>No Image Available</div>'">` :
-                    `<div class="game-placeholder">🎮 ${title}</div>`
+                    `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
+                    `<div class="game-placeholder">${title}</div>`
                 }
                 <div class="game-content">
-                    <h3 class="game-title">${title}</h3>
-                    <p class="game-description">${description}</p>
+                    <div>
+                        <h3 class="game-title">${title}</h3>
+                        <p class="game-description">${description}</p>
+                    </div>
+                    <div class="switch-label">by ${creator}</div>
                 </div>
             `;
 
-            // Add click handler to navigate to game
             card.addEventListener('click', () => {
-                window.location.href = game.path + 'index.html';
+                launchGame(game, card);
             });
 
             return card;
         }
 
-        // Alternative method: Try to detect games by checking for index.html files
-        async function alternativeDiscovery() {
-            // This would require server-side directory listing or a manifest file
-            // For now, we'll use the common names approach
-            console.log('Using common game names discovery method');
+        function launchGame(game, cardElement) {
+            // Show black overlay behind the zooming image
+            const overlay = document.getElementById('fullscreen-overlay');
+            overlay.classList.add('active');
+            
+            // Get the game image element from the card
+            const gameImage = cardElement.querySelector('.game-image, .game-placeholder');
+            
+            // Add the zoom class to make it go fullscreen
+            gameImage.classList.add('zoom-fullscreen');
+            
+            // Navigate to game after animation completes
+            setTimeout(() => {
+                window.location.href = game.path + 'index.html';
+            }, 800);
         }
 
-        // Start the discovery process
         document.addEventListener('DOMContentLoaded', discoverGames);
     </script>
 </body>

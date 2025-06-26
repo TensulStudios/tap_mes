@@ -1,5 +1,6 @@
 {
   "title": "EaglerCraftX",
   "description": "EaglerCraft is a web version of Minecraft, all credits go to <a href='https://eaglercraft.com/'>https://eaglercraft.com/</a>.",
-  "image": "games/minecraft/image.png"
+  "image": "games/minecraft/image.png",
+  "creator": "Lax1dude"
 }

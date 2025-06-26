@@ -1,5 +1,6 @@
 {
   "title": "2048",
   "description": "Use your arrow keys to move the tiles. When two tiles with the same number touch, they merge into one!",
-  "image": "games/2048/image.png"
+  "image": "games/2048/image.png",
+  "creator": "Gabriele Cirull"
 }
