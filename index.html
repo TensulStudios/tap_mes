@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tames Games</title>
     <style>
@@ -82,13 +82,6 @@
             font-size: 18px;
         }
 
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1em;
-            margin-top: 2rem;
-        }
-
         .game-card {
             border: 2px solid #000000;
             border-radius: 8px;
@@ -111,13 +104,6 @@
             width: 100%;
             height: 9px;
             background: linear-gradient(0deg, #000000, transparent);
-        }
-
-        .game-card:hover {
-            transform: translateY(-8px) rotateX(2deg);
-            box-shadow: 
-                0 12px 24px rgb(85, 85, 85),
-                inset 0 1px 2px rgba(255, 255, 255, 1);
         }
 
         .game-card.launching {
@@ -148,7 +134,7 @@
 
         .game-content {
             padding: 2.8rem;
-            background: linear-gradient(135deg, #000000ad 15%, #161616ad 100%);
+            background: black;
             height: calc(100% - 200px);
             display: flex;
             flex-direction: column;
@@ -245,6 +231,12 @@
             border-bottom: 1px solid #ccc;
         }
 
+        .games-grid .game-card {
+            opacity: 0.1;
+            transition: opacity 0.3s ease;
+        }
+
+
         @media (max-width: 768px) {
             .games-grid {
                 grid-template-columns: 1fr;
@@ -254,118 +246,170 @@
                 font-size: 2rem;
             }
         }
+        
+       .games-wrapper {
+      position: relative;
+    }
+
+    .games-grid {
+      display: flex;
+      overflow-x: auto;
+      gap: 2rem;
+      scroll-behavior: smooth;
+      padding: 8rem;
+      width: 100%;
+      align-items: center;
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+
+    .games-grid .game-card {
+      flex: 0 0 auto;
+      opacity: 0.1;
+      transition: all 0.3s ease;
+      background: #000;
+    }
+
+    .game-card.selected {
+      outline: 3px solid #ffffff;
+      box-shadow: 0 0 12px #ffffff;
+      transform: scale(1.25);
+      opacity: 1 !important;
+    }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Tames</h1>
-        <h3><b>Free, Fun and Online games.</b></h3>
-        <div id="loading" class="loading">Reading..</div>
-        <div id="games-container" class="games-grid"></div>
-        <div id="no-games" class="no-games" style="display: none;">
-            No games found, this could be due to an internet connection issue or any other issue.
-        </div>
+  <div class="container">
+    <h1>Tames</h1>
+    <h3><b>Free, Fun and Online games.</b></h3>
+    <div id="loading" class="loading">Reading..</div>
+    <div id="games-container" class="games-grid"></div>
+    <div id="no-games" class="no-games" style="display: none;">
+      No games found, this could be due to an internet connection issue or any other issue.
     </div>
+  </div>
+  <div id="fullscreen-overlay" class="fullscreen-overlay"></div>
 
-    <div id="fullscreen-overlay" class="fullscreen-overlay"></div>
+  <script>
+    let gameCards = [];
+    let selectedIndex = 0;
 
-    <script>
-        async function discoverGames() {
-            const gamesContainer = document.getElementById('games-container');
-            const loadingElement = document.getElementById('loading');
-            const noGamesElement = document.getElementById('no-games');
-            
-            try {
-                const commonGameNames = [
-                    'minecraft','2048','seffects','fnf','unlikely'
-                ];
+    async function discoverGames() {
+      const gamesContainer = document.getElementById('games-container');
+      const loadingElement = document.getElementById('loading');
+      const noGamesElement = document.getElementById('no-games');
 
-                const foundGames = [];
-                
-                for (const gameName of commonGameNames) {
-                    try {
-                        const response = await fetch(`/games/${gameName}/game.json`);
-                        if (response.ok) {
-                            const gameData = await response.json();
-                            foundGames.push({
-                                name: gameName,
-                                ...gameData,
-                                path: `/games/${gameName}/`
-                            });
-                        }
-                    } catch (error) {
-                        continue;
-                    }
-                }
+      try {
+        const commonGameNames = [ 'minecraft', '2048', 'seffects', 'fnf', 'unlikely' ];
+        const foundGames = [];
 
-                loadingElement.style.display = 'none';
-
-                if (foundGames.length === 0) {
-                    noGamesElement.style.display = 'block';
-                    return;
-                }
-
-                // Display found games
-                foundGames.forEach(game => {
-                    const gameCard = createGameCard(game);
-                    gamesContainer.appendChild(gameCard);
-                });
-
-            } catch (error) {
-                loadingElement.innerHTML = `<div class="error-message">Error discovering games: ${error.message}</div>`;
+        for (const gameName of commonGameNames) {
+          try {
+            const response = await fetch(`/games/${gameName}/game.json`);
+            if (response.ok) {
+              const gameData = await response.json();
+              foundGames.push({ name: gameName, ...gameData, path: `/games/${gameName}/` });
             }
+          } catch (error) {
+            continue;
+          }
         }
 
-        function createGameCard(game) {
-            const card = document.createElement('div');
-            card.className = 'game-card';
-            
-            const title = game.title || game.name || 'Unknown Game';
-            const description = game.description || 'No description available';
-            const imageSrc = game.image || '';
-            const creator = game.creator || 'Tames';
-            const from = game.from || 'Tames Made';
+        loadingElement.style.display = 'none';
 
-            card.innerHTML = `
-                ${imageSrc ? 
-                    `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
-                    `<div class="game-placeholder">No image available</div>`
-                }
-                <div class="game-content">
-                    <div>
-                        <h3 class="game-title">${title}</h3>
-                        <p class="game-description">${description}</p>
-                    </div>
-                    <div class="switch-label" style="font-size:17px;padding-bottom: 0px;padding-top: 0px;">${creator}<div class="switch-label" style="font-size:10px;padding-bottom: 0px;padding-top: 0px;">${from}</div></div>
-                    
-                </div>
-            `;
-
-            card.addEventListener('click', () => {
-                launchGame(game, card);
-            });
-
-            return card;
+        if (foundGames.length === 0) {
+          noGamesElement.style.display = 'block';
+          return;
         }
 
-        function launchGame(game, cardElement) {
-            // Show black overlay behind the zooming image
-            const overlay = document.getElementById('fullscreen-overlay');
-            overlay.classList.add('active');
-            
-            // Get the game image element from the card
-            const gameImage = cardElement.querySelector('.game-image, .game-placeholder');
-            
-            // Add the zoom class to make it go fullscreen
-            gameImage.classList.add('zoom-fullscreen');
-            
-            // Navigate to game after animation completes
-            setTimeout(() => {
-                window.location.href = game.path + 'index.html';
-            }, 800);
-        }
+        foundGames.forEach(game => {
+          const card = createGameCard(game);
+          gamesContainer.appendChild(card);
+          gameCards.push({ card, game });
+        });
 
-        document.addEventListener('DOMContentLoaded', discoverGames);
-    </script>
+        updateSelection();
+      } catch (error) {
+        loadingElement.innerHTML = `<div class="error-message">Error discovering games: ${error.message}</div>`;
+      }
+    }
+
+    function playSound(url) {
+    const audio = new Audio(url);
+    audio.play();
+}
+
+    function createGameCard(game) {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+
+      const title = game.title || game.name || 'Unknown Game';
+      const description = game.description || 'No description available';
+      const imageSrc = game.image || '';
+      const creator = game.creator || 'Tames';
+      const from = game.from || 'Tames Made';
+
+      card.innerHTML = `
+        ${imageSrc ? 
+          `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\'game-placeholder\'>${title}</div>'">` :
+          `<div class="game-placeholder">No image available</div>`
+        }
+        <div class="game-content">
+          <div>
+            <h3 class="game-title">${title}</h3>
+            <p class="game-description">${description}</p>
+          </div>
+          <div class="switch-label" style="font-size:17px;padding-bottom: 0px;padding-top: 0px;">
+            ${creator}<div class="switch-label" style="font-size:10px;padding-bottom: 0px;padding-top: 0px;">${from}</div>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+  function updateSelection() {
+    gameCards.forEach((obj, index) => {
+      obj.card.classList.toggle('selected', index === selectedIndex);
+    });
+
+    playSound("select.mp3")
+
+    const selectedCard = gameCards[selectedIndex]?.card;
+    if (selectedCard) {
+      selectedCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }
+
+    function launchSelectedGame() {
+      if (gameCards[selectedIndex]) {
+        launchGame(gameCards[selectedIndex].game, gameCards[selectedIndex].card);
+      }
+    }
+
+    function launchGame(game, cardElement) {
+      const overlay = document.getElementById('fullscreen-overlay');
+      overlay.classList.add('active');
+      const gameImage = cardElement.querySelector('.game-image, .game-placeholder');
+      gameImage.classList.add('zoom-fullscreen');
+      setTimeout(() => {
+        window.location.href = game.path + 'index.html';
+      }, 800);
+    }
+
+    document.addEventListener('DOMContentLoaded', discoverGames);
+
+    document.addEventListener('keydown', (e) => {
+      if (!gameCards.length) return;
+      if (e.key === 'ArrowRight') {
+        selectedIndex = (selectedIndex + 1) % gameCards.length;
+        updateSelection();
+      } else if (e.key === 'ArrowLeft') {
+        selectedIndex = (selectedIndex - 1 + gameCards.length) % gameCards.length;
+        updateSelection();
+      } else if (e.key === 'Enter') {
+        launchSelectedGame();
+      }
+    });
+  </script>
 </body>
 </html>
