@@ -84,7 +84,8 @@
 
         .game-card {
             border: 2px solid #000000;
-            border-radius: 8px;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
             overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -112,10 +113,11 @@
 
         .game-image {
             width: 100%;
+            background-color: #ffffff;
             height: 200px;
             object-fit: cover;
-            border-bottom: 1px solid #ccc;
-            border-radius: 5px;
+            margin:0;
+            padding:0;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -254,9 +256,8 @@
     .games-grid {
       display: flex;
       overflow-x: auto;
-      gap: 2rem;
       scroll-behavior: smooth;
-      padding: 8rem;
+      padding: 15rem;
       width: 100%;
       align-items: center;
       mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
@@ -273,8 +274,10 @@
     .game-card.selected {
       outline: 3px solid #ffffff;
       box-shadow: 0 0 12px #ffffff;
-      transform: scale(1.25);
+      transform: scale(1.35);
+      border-top: 50px;
       opacity: 1 !important;
+      z-index: 55;
     }
 
     iframe
@@ -296,10 +299,10 @@
     </style>
 </head>
 <body>
-    <iframe id="main" hidden></iframe>
+  <iframe id="main" hidden></iframe>
   <div class="container">
-    <h1>TamesOS</h1>
-    <div id="loading" class="loading">Reading..</div>
+    <h1>tOS</h1>
+    <div id="loading" class="loading">Looking for Tames Games..</div>
     <div id="games-container" class="games-grid"></div>
     <div id="no-games" class="no-games" style="display: none;">
       No games found, this could be due to an internet connection issue or any other issue.
