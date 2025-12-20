@@ -310,10 +310,6 @@
     <div id="games-container" class="games-grid"></div>
     <div id="no-games" class="no-games" style="display: none;">
       No games found, this could be due to an internet connection issue or any other issue.
-    </div>
-  Arrow keys to move.<br/>
-  Enter to start game.
-  </div>
   <div id="fullscreen-overlay" class="fullscreen-overlay"></div>
 
   <script>
@@ -418,8 +414,7 @@
     }
 
     function launchGame(game, cardElement) {
-        document.getElementById("main").attributes.removeNamedItem("hidden")
-        document.getElementById("main").src = "games/" + game.name
+        window.open("games/" + game.name, '_self')
     }
 
     document.addEventListener('DOMContentLoaded', discoverGames);
