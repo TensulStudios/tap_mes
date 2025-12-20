@@ -13,111 +13,127 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #2c2c2c;
+      background: #2d2d2d;
       min-height: 100vh;
       color: #fff;
       overflow: hidden;
     }
 
+    .switch-screen {
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+      position: relative;
+    }
+
     .top-bar {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 60px;
-      background: #1a1a1a;
+      height: 50px;
+      background: rgba(20, 20, 20, 0.95);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
+      padding: 0 24px;
       z-index: 100;
-      border-bottom: 1px solid #3a3a3a;
     }
 
-    .user-info {
+    .user-section {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
 
     .user-avatar {
-      width: 40px;
-      height: 40px;
-      background: #ff4757;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      border: 2px solid #fff;
     }
 
-    .status-icons {
+    .status-section {
       display: flex;
       align-items: center;
-      gap: 15px;
-      font-size: 14px;
-    }
-
-    .time {
+      gap: 16px;
+      font-size: 13px;
       font-weight: 500;
     }
 
-    .game-title-display {
-      position: fixed;
-      top: 80px;
-      left: 30px;
-      font-size: 28px;
-      font-weight: 300;
-      color: #fff;
-      z-index: 50;
+    .icon {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
     }
 
-    .games-wrapper {
-      position: fixed;
-      top: 140px;
+    .battery-icon {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .content-area {
+      position: absolute;
+      top: 50px;
       left: 0;
       right: 0;
-      bottom: 100px;
+      bottom: 80px;
       overflow: hidden;
     }
 
-    .games-grid {
+    .games-section {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
-      gap: 25px;
-      padding: 0 120px;
-      height: 100%;
-      align-items: center;
-      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      align-items: flex-start;
+      padding-left: 60px;
+    }
+
+    .games-container {
+      display: flex;
+      gap: 30px;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 20px 0;
     }
 
     .game-card {
       flex: 0 0 280px;
-      height: 380px;
-      background: #1a1a1a;
-      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .game-card-inner {
+      background: #fff;
+      border-radius: 16px;
       overflow: hidden;
-      transition: all 0.3s ease;
-      opacity: 0.5;
-      transform: scale(0.9);
-      border: 3px solid transparent;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .game-card.selected {
-      opacity: 1;
-      transform: scale(1);
-      border: 3px solid #0ee6f2;
-      box-shadow: 0 0 30px rgba(14, 230, 242, 0.3);
+    .game-card.selected .game-card-inner {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
     }
 
-    .game-image-wrapper {
-      width: 100%;
+    .game-image-container {
+      width: 280px;
       height: 280px;
       background: #000;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
     }
 
     .game-image {
@@ -129,183 +145,178 @@
     .game-placeholder {
       width: 100%;
       height: 100%;
-      background: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #888;
+      color: #fff;
       font-size: 18px;
-    }
-
-    .game-info {
-      padding: 15px;
-      background: #1a1a1a;
-    }
-
-    .game-name {
-      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      text-align: center;
+      padding: 20px;
     }
 
-    .game-creator {
-      font-size: 12px;
-      color: #999;
+    .game-title-section {
+      position: absolute;
+      bottom: 120px;
+      left: 60px;
+      right: 60px;
     }
 
-    .bottom-bar {
-      position: fixed;
+    .game-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .game-publisher {
+      font-size: 15px;
+      color: #b0b0b0;
+      font-weight: 400;
+    }
+
+    .bottom-dock {
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 90px;
-      background: #1a1a1a;
-      border-top: 1px solid #3a3a3a;
+      height: 80px;
+      background: rgba(20, 20, 20, 0.95);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 40px;
-      z-index: 100;
+      justify-content: space-around;
+      padding: 0 40px;
     }
 
-    .nav-icon {
+    .dock-icon {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
+      opacity: 0.6;
     }
 
-    .nav-icon:hover {
-      background: #2c2c2c;
+    .dock-icon:hover {
+      background: rgba(255, 255, 255, 0.1);
+      opacity: 1;
     }
 
-    .nav-icon.active {
-      background: #0ee6f2;
+    .dock-icon.active {
+      background: rgba(255, 255, 255, 0.15);
+      opacity: 1;
     }
 
-    .icon-label {
+    .dock-label {
       font-size: 11px;
-      color: #999;
-    }
-
-    .nav-icon.active .icon-label {
-      color: #000;
+      color: #fff;
+      font-weight: 500;
     }
 
     .loading {
-      position: fixed;
+      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      font-size: 18px;
+      font-size: 20px;
       color: #999;
     }
 
-    .controls-hint {
-      position: fixed;
-      bottom: 110px;
-      right: 30px;
-      font-size: 12px;
-      color: #666;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      text-align: right;
+    .selection-indicator {
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
 
-    svg {
-      width: 24px;
-      height: 24px;
-      fill: #999;
-    }
-
-    .nav-icon.active svg {
-      fill: #000;
+    .game-card.selected .selection-indicator {
+      opacity: 1;
     }
 
     @media (max-width: 768px) {
-      .games-grid {
-        padding: 0 60px;
-      }
-      
       .game-card {
-        flex: 0 0 220px;
-        height: 320px;
+        flex: 0 0 200px;
       }
 
-      .game-image-wrapper {
-        height: 220px;
+      .game-image-container {
+        width: 200px;
+        height: 200px;
+      }
+
+      .games-section {
+        padding-left: 40px;
+      }
+
+      .game-title {
+        font-size: 24px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="top-bar">
-    <div class="user-info">
-      <div class="user-avatar">2</div>
+  <div class="switch-screen">
+    <div class="top-bar">
+      <div class="user-section">
+        <div class="user-avatar">2</div>
+      </div>
+      <div class="status-section">
+        <span id="current-time">9:27 AM</span>
+        <div class="battery-icon">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zm-1 14.67h-5.33v-11h5.33v11z"/>
+          </svg>
+        </div>
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+        </svg>
+      </div>
     </div>
-    <div class="status-icons">
-      <span class="time" id="current-time">09:27 AM</span>
-      <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;">
-        <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
-      </svg>
-      <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;">
-        <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/>
-      </svg>
-    </div>
-  </div>
 
-  <div class="game-title-display" id="game-title">All Games</div>
+    <div class="content-area">
+      <div id="loading" class="loading">Loading Games...</div>
+      
+      <div class="games-section">
+        <div class="games-container" id="games-container"></div>
+      </div>
 
-  <div id="loading" class="loading">Loading Games...</div>
+      <div class="game-title-section" id="game-info" style="display: none;">
+        <div class="game-title" id="selected-title">Game Title</div>
+        <div class="game-publisher" id="selected-publisher">Publisher</div>
+      </div>
+    </div>
 
-  <div class="games-wrapper">
-    <div class="games-grid" id="games-container"></div>
-  </div>
-
-  <div class="controls-hint">
-    <div>← → Navigate</div>
-    <div>Enter to Launch</div>
-  </div>
-
-  <div class="bottom-bar">
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/>
-      </svg>
-      <span class="icon-label">Online</span>
-    </div>
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-      </svg>
-      <span class="icon-label">News</span>
-    </div>
-    <div class="nav-icon active">
-      <svg viewBox="0 0 24 24">
-        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-      </svg>
-      <span class="icon-label">All Games</span>
-    </div>
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-      </svg>
-      <span class="icon-label">Settings</span>
-    </div>
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
-      </svg>
-      <span class="icon-label">Power</span>
+    <div class="bottom-dock">
+      <div class="dock-icon active">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span class="dock-label">All Games</span>
+      </div>
+      <div class="dock-icon">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span class="dock-label">Album</span>
+      </div>
+      <div class="dock-icon">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+        <span class="dock-label">Settings</span>
+      </div>
     </div>
   </div>
 
@@ -359,6 +370,7 @@
           gameCards.push({ card, game });
         });
 
+        document.getElementById('game-info').style.display = 'block';
         updateSelection();
       } catch (error) {
         loadingElement.textContent = `Error: ${error.message}`;
@@ -371,19 +383,17 @@
 
       const title = game.title || game.name || 'Unknown Game';
       const imageSrc = game.image || '';
-      const creator = game.creator || 'Tames';
 
       card.innerHTML = `
-        <div class="game-image-wrapper">
-          ${imageSrc ? 
-            `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
-            `<div class="game-placeholder">${title}</div>`
-          }
+        <div class="game-card-inner">
+          <div class="game-image-container">
+            ${imageSrc ? 
+              `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
+              `<div class="game-placeholder">${title}</div>`
+            }
+          </div>
         </div>
-        <div class="game-info">
-          <div class="game-name">${title}</div>
-          <div class="game-creator">${creator}</div>
-        </div>
+        <div class="selection-indicator"></div>
       `;
       return card;
     }
@@ -395,15 +405,16 @@
 
       const selectedGame = gameCards[selectedIndex]?.game;
       if (selectedGame) {
-        document.getElementById('game-title').textContent = selectedGame.title || selectedGame.name || 'Unknown Game';
+        document.getElementById('selected-title').textContent = selectedGame.title || selectedGame.name || 'Unknown Game';
+        document.getElementById('selected-publisher').textContent = selectedGame.creator || 'Tames';
       }
 
       const container = document.getElementById('games-container');
       const selectedCard = gameCards[selectedIndex]?.card;
 
       if (selectedCard && container) {
-        const cardWidth = selectedCard.offsetWidth + 25;
-        const offset = -selectedIndex * cardWidth + (window.innerWidth / 2) - (cardWidth / 2);
+        const cardWidth = 310;
+        const offset = -selectedIndex * cardWidth;
         container.style.transform = `translateX(${offset}px)`;
       }
     }
@@ -420,14 +431,25 @@
     document.addEventListener('keydown', (e) => {
       if (!gameCards.length) return;
       if (e.key === 'ArrowRight') {
+        e.preventDefault();
         selectedIndex = (selectedIndex + 1) % gameCards.length;
         updateSelection();
       } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
         selectedIndex = (selectedIndex - 1 + gameCards.length) % gameCards.length;
         updateSelection();
       } else if (e.key === 'Enter') {
+        e.preventDefault();
         launchSelectedGame();
       }
+    });
+
+    gameCards.forEach((obj, index) => {
+      obj.card.addEventListener('click', () => {
+        selectedIndex = index;
+        updateSelection();
+        setTimeout(() => launchSelectedGame(), 300);
+      });
     });
 
     window.addEventListener('resize', updateSelection);
