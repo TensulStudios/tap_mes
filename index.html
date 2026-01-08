@@ -13,17 +13,143 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #2d2d2d;
+      background: #0a0a0a;
       min-height: 100vh;
       color: #fff;
       overflow: hidden;
     }
 
-    .switch-screen {
+    /* Startup Animation */
+    .startup-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+      background: #000;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .startup-logo-container {
       position: relative;
+      width: 300px;
+      height: 300px;
+    }
+
+    .startup-logo {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+    }
+
+    .startup-logo.ghost {
+      animation: ghostFade 1.5s ease-out forwards;
+    }
+
+    @keyframes ghostFade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.3);
+      }
+    }
+
+    .startup-fade {
+      animation: startupFadeOut 0.8s ease-out 1.5s forwards;
+    }
+
+    @keyframes startupFadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+
+    .branding-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 9999;
+      opacity: 0;
+      animation: brandingAppear 0.5s ease-out 2.3s forwards, brandingFadeOut 0.8s ease-out 4s forwards;
+    }
+
+    @keyframes brandingAppear {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes brandingFadeOut {
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .branding-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 60px;
+    }
+
+    .branding-text {
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #fff;
+      opacity: 0;
+      animation: textSlideIn 0.8s ease-out 2.5s forwards;
+    }
+
+    @keyframes textSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Main Console UI */
+    .console-screen {
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      position: relative;
+      opacity: 0;
+      animation: mainFadeIn 1s ease-out 4.8s forwards;
+    }
+
+    @keyframes mainFadeIn {
+      to {
+        opacity: 1;
+      }
     }
 
     .top-bar {
@@ -31,103 +157,115 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 50px;
-      background: rgba(20, 20, 20, 0.95);
+      height: 60px;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(20px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 40px;
       z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .user-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
     }
 
     .user-avatar {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+      background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       color: #fff;
-      border: 2px solid #fff;
+      border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .status-section {
       display: flex;
       align-items: center;
-      gap: 16px;
-      font-size: 13px;
-      font-weight: 500;
+      gap: 20px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .icon {
       width: 20px;
       height: 20px;
-      fill: #fff;
-    }
-
-    .battery-icon {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      fill: rgba(255, 255, 255, 0.8);
     }
 
     .content-area {
-      position: absolute;
-      top: 50px;
-      left: 0;
-      right: 0;
-      bottom: 80px;
-      overflow: hidden;
-    }
-
-    .games-section {
       position: absolute;
       top: 60px;
       left: 0;
       right: 0;
       bottom: 0;
-      display: flex;
-      align-items: flex-start;
-      padding-left: 60px;
+      overflow: hidden;
     }
 
-    .games-container {
-      display: flex;
-      gap: 30px;
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 20px 0;
+    .games-grid {
+      position: absolute;
+      top: 80px;
+      left: 100px;
+      right: 100px;
+      bottom: 100px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 40px;
+      overflow-y: auto;
+      padding-bottom: 40px;
+    }
+
+    .games-grid::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .games-grid::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .games-grid::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
     }
 
     .game-card {
-      flex: 0 0 280px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px);
     }
 
     .game-card-inner {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 16px;
       overflow: hidden;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
     }
 
-    .game-card.selected .game-card-inner {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    .game-card:hover .game-card-inner {
+      border-color: rgba(0, 212, 255, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .game-image-container {
-      width: 280px;
+      width: 100%;
       height: 280px;
       background: #000;
       overflow: hidden;
@@ -156,66 +294,23 @@
       padding: 20px;
     }
 
-    .game-title-section {
-      position: absolute;
-      bottom: 120px;
-      left: 60px;
-      right: 60px;
+    .game-info-section {
+      padding: 20px;
     }
 
     .game-title {
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 600;
       color: #fff;
       margin-bottom: 8px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .game-publisher {
-      font-size: 15px;
-      color: #b0b0b0;
-      font-weight: 400;
-    }
-
-    .bottom-dock {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: rgba(20, 20, 20, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 40px;
-    }
-
-    .dock-icon {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      opacity: 0.6;
-    }
-
-    .dock-icon:hover {
-      background: rgba(255, 255, 255, 0.1);
-      opacity: 1;
-    }
-
-    .dock-icon.active {
-      background: rgba(255, 255, 255, 0.15);
-      opacity: 1;
-    }
-
-    .dock-label {
-      font-size: 11px;
-      color: #fff;
-      font-weight: 500;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
     }
 
     .loading {
@@ -224,50 +319,179 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      font-size: 20px;
-      color: #999;
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.6);
     }
 
-    .selection-indicator {
+    /* Game View */
+    .game-view {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      z-index: 1000;
+      display: none;
+    }
+
+    .game-view.active {
+      display: block;
+    }
+
+    .game-header {
       position: absolute;
-      bottom: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 8px solid rgba(255, 255, 255, 0.9);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1002;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      animation: headerFadeIn 0.8s ease-out 5.6s forwards;
       opacity: 0;
-      transition: opacity 0.2s;
     }
 
-    .game-card.selected .selection-indicator {
+    @keyframes headerFadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .game-header-text {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 2px;
+    }
+
+    .game-sidebar {
+      position: absolute;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100vh;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 1001;
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .game-sidebar.open {
+      left: 0;
+    }
+
+    .sidebar-toggle {
+      position: absolute;
+      top: 50%;
+      right: -40px;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 80px;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: none;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .sidebar-toggle:hover {
+      background: rgba(20, 20, 20, 0.95);
+    }
+
+    .sidebar-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+      transition: transform 0.3s;
+    }
+
+    .game-sidebar.open .sidebar-toggle svg {
+      transform: rotate(180deg);
+    }
+
+    .game-iframe-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .game-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .game-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+
+    .game-bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
       opacity: 1;
+      animation: bottomBarFadeOut 1s ease-out 5.5s forwards;
+      pointer-events: none;
+    }
+
+    @keyframes bottomBarFadeOut {
+      to {
+        opacity: 0;
+      }
     }
 
     @media (max-width: 768px) {
-      .game-card {
-        flex: 0 0 200px;
+      .games-grid {
+        left: 40px;
+        right: 40px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 30px;
       }
 
       .game-image-container {
-        width: 200px;
         height: 200px;
-      }
-
-      .games-section {
-        padding-left: 40px;
-      }
-
-      .game-title {
-        font-size: 24px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="switch-screen">
+  <!-- Startup Animation -->
+  <div class="startup-screen startup-fade">
+    <div class="startup-logo-container">
+      <div class="startup-logo ghost">tOS</div>
+      <div class="startup-logo">tOS</div>
+    </div>
+  </div>
+
+  <div class="branding-screen">
+    <div class="branding-bar">
+      <div class="branding-text">Tames</div>
+    </div>
+  </div>
+
+  <!-- Main Console UI -->
+  <div class="console-screen">
     <div class="top-bar">
       <div class="user-section">
         <div class="user-avatar">2</div>
@@ -288,41 +512,35 @@
     <div class="content-area">
       <div id="loading" class="loading">Loading Games...</div>
       
-      <div class="games-section">
-        <div class="games-container" id="games-container"></div>
-      </div>
+      <div class="games-grid" id="games-grid"></div>
+    </div>
+  </div>
 
-      <div class="game-title-section" id="game-info" style="display: none;">
-        <div class="game-title" id="selected-title">Game Title</div>
-        <div class="game-publisher" id="selected-publisher">Publisher</div>
+  <!-- Game View -->
+  <div class="game-view" id="game-view">
+    <div class="game-header">
+      <div class="game-header-text">tames.online</div>
+    </div>
+
+    <div class="game-sidebar" id="game-sidebar">
+      <div class="sidebar-toggle" id="sidebar-toggle">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
       </div>
     </div>
 
-    <div class="bottom-dock">
-      <div class="dock-icon active">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        <span class="dock-label">All Games</span>
-      </div>
-      <div class="dock-icon">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </svg>
-        <span class="dock-label">Album</span>
-      </div>
-      <div class="dock-icon">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-        </svg>
-        <span class="dock-label">Settings</span>
-      </div>
+    <div class="game-iframe-container">
+      <iframe class="game-iframe" id="game-iframe"></iframe>
+    </div>
+
+    <div class="game-overlay">
+      <div class="game-bottom-bar"></div>
     </div>
   </div>
 
   <script>
-    let gameCards = [];
-    let selectedIndex = 0;
+    let games = [];
 
     function updateTime() {
       const now = new Date();
@@ -337,7 +555,7 @@
     setInterval(updateTime, 60000);
 
     async function discoverGames() {
-      const gamesContainer = document.getElementById('games-container');
+      const gamesGrid = document.getElementById('games-grid');
       const loadingElement = document.getElementById('loading');
 
       try {
@@ -364,14 +582,12 @@
           return;
         }
 
+        games = foundGames;
+
         foundGames.forEach(game => {
           const card = createGameCard(game);
-          gamesContainer.appendChild(card);
-          gameCards.push({ card, game });
+          gamesGrid.appendChild(card);
         });
-
-        document.getElementById('game-info').style.display = 'block';
-        updateSelection();
       } catch (error) {
         loadingElement.textContent = `Error: ${error.message}`;
       }
@@ -392,67 +608,51 @@
               `<div class="game-placeholder">${title}</div>`
             }
           </div>
+          <div class="game-info-section">
+            <div class="game-title">${title}</div>
+            <div class="game-publisher">${game.creator || 'Tames'}</div>
+          </div>
         </div>
-        <div class="selection-indicator"></div>
       `;
+
+      card.addEventListener('click', () => {
+        launchGame(game);
+      });
+
       return card;
     }
 
-    function updateSelection() {
-      gameCards.forEach((obj, index) => {
-        obj.card.classList.toggle('selected', index === selectedIndex);
-      });
-
-      const selectedGame = gameCards[selectedIndex]?.game;
-      if (selectedGame) {
-        document.getElementById('selected-title').textContent = selectedGame.title || selectedGame.name || 'Unknown Game';
-        document.getElementById('selected-publisher').textContent = selectedGame.creator || 'Tames';
-      }
-
-      const container = document.getElementById('games-container');
-      const selectedCard = gameCards[selectedIndex]?.card;
-
-      if (selectedCard && container) {
-        const cardWidth = 310;
-        const offset = -selectedIndex * cardWidth;
-        container.style.transform = `translateX(${offset}px)`;
-      }
+    function launchGame(game) {
+      const gameView = document.getElementById('game-view');
+      const gameIframe = document.getElementById('game-iframe');
+      
+      gameIframe.src = 'games/' + game.name;
+      gameView.classList.add('active');
     }
 
-    function launchSelectedGame() {
-      if (gameCards[selectedIndex]) {
-        const game = gameCards[selectedIndex].game;
-        window.open("games/" + game.name, '_self');
+    // Sidebar toggle
+    const sidebar = document.getElementById('game-sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+
+    sidebarToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('open') && 
+          !sidebar.contains(e.target)) {
+        sidebar.classList.remove('open');
       }
-    }
+    });
+
+    // Remove startup screens after animation
+    setTimeout(() => {
+      document.querySelector('.startup-screen').remove();
+      document.querySelector('.branding-screen').remove();
+    }, 5000);
 
     document.addEventListener('DOMContentLoaded', discoverGames);
-
-    document.addEventListener('keydown', (e) => {
-      if (!gameCards.length) return;
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        selectedIndex = (selectedIndex + 1) % gameCards.length;
-        updateSelection();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        selectedIndex = (selectedIndex - 1 + gameCards.length) % gameCards.length;
-        updateSelection();
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        launchSelectedGame();
-      }
-    });
-
-    gameCards.forEach((obj, index) => {
-      obj.card.addEventListener('click', () => {
-        selectedIndex = index;
-        updateSelection();
-        setTimeout(() => launchSelectedGame(), 300);
-      });
-    });
-
-    window.addEventListener('resize', updateSelection);
   </script>
 </body>
 </html>
