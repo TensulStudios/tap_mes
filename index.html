@@ -136,6 +136,149 @@
       }
     }
 
+    /* Game Launch Animation */
+    .game-launch-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-launch-screen.active {
+      display: flex;
+    }
+
+    .game-launch-image-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+    }
+
+    .game-launch-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-launch-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-launch-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 32px;
+      font-weight: 600;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .game-launch-image.ghost {
+      animation: gameLaunchGhostFade 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes gameLaunchGhostFade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.4);
+      }
+    }
+
+    .game-launch-fade {
+      animation: gameLaunchFadeOut 0.8s ease-out 1.5s forwards;
+    }
+
+    @keyframes gameLaunchFadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+
+    .game-branding-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 9999;
+      opacity: 0;
+      display: none;
+    }
+
+    .game-branding-screen.active {
+      display: block;
+      animation: gameBrandingAppear 0.5s ease-out forwards, gameBrandingFadeOut 0.8s ease-out 1.5s forwards;
+    }
+
+    @keyframes gameBrandingAppear {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes gameBrandingFadeOut {
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .game-branding-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 60px;
+    }
+
+    .game-branding-text {
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #fff;
+      opacity: 0;
+      animation: gameBrandingTextSlideIn 0.8s ease-out 0.2s forwards;
+    }
+
+    @keyframes gameBrandingTextSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
     /* Main Console UI */
     .console-screen {
       width: 100vw;
@@ -352,8 +495,11 @@
       justify-content: center;
       z-index: 1002;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      animation: headerFadeIn 0.8s ease-out 5.6s forwards;
       opacity: 0;
+    }
+
+    .game-header.show {
+      animation: headerFadeIn 0.8s ease-out forwards;
     }
 
     @keyframes headerFadeIn {
@@ -450,9 +596,12 @@
       width: 100%;
       height: 80px;
       background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      opacity: 0;
+    }
+
+    .game-bottom-bar.show {
       opacity: 1;
-      animation: bottomBarFadeOut 1s ease-out 5.5s forwards;
-      pointer-events: none;
+      animation: bottomBarFadeOut 1s ease-out 1s forwards;
     }
 
     @keyframes bottomBarFadeOut {
@@ -472,11 +621,16 @@
       .game-image-container {
         height: 200px;
       }
+
+      .game-launch-image-container {
+        width: 280px;
+        height: 280px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Startup Animation -->
+  <!-- Initial Startup Animation -->
   <div class="startup-screen startup-fade">
     <div class="startup-logo-container">
       <div class="startup-logo ghost">tOS</div>
@@ -487,6 +641,20 @@
   <div class="branding-screen">
     <div class="branding-bar">
       <div class="branding-text">Tames</div>
+    </div>
+  </div>
+
+  <!-- Game Launch Animation -->
+  <div class="game-launch-screen" id="game-launch-screen">
+    <div class="game-launch-image-container">
+      <div class="game-launch-image ghost" id="game-launch-ghost"></div>
+      <div class="game-launch-image" id="game-launch-main"></div>
+    </div>
+  </div>
+
+  <div class="game-branding-screen" id="game-branding-screen">
+    <div class="game-branding-bar">
+      <div class="game-branding-text">Tames</div>
     </div>
   </div>
 
@@ -515,7 +683,7 @@
 
   <!-- Game View -->
   <div class="game-view" id="game-view">
-    <div class="game-header">
+    <div class="game-header" id="game-header">
       <div class="game-header-text">tames.online</div>
     </div>
 
@@ -532,7 +700,7 @@
     </div>
 
     <div class="game-overlay">
-      <div class="game-bottom-bar"></div>
+      <div class="game-bottom-bar" id="game-bottom-bar"></div>
     </div>
   </div>
 
@@ -613,18 +781,57 @@
       `;
 
       card.addEventListener('click', () => {
-        launchGame(game);
+        launchGame(game, imageSrc, title);
       });
 
       return card;
     }
 
-    function launchGame(game) {
-      const gameView = document.getElementById('game-view');
-      const gameIframe = document.getElementById('game-iframe');
+    function launchGame(game, imageSrc, title) {
+      const launchScreen = document.getElementById('game-launch-screen');
+      const brandingScreen = document.getElementById('game-branding-screen');
+      const ghostImage = document.getElementById('game-launch-ghost');
+      const mainImage = document.getElementById('game-launch-main');
+
+      // Set up the launch animation with the game's image
+      const imageHTML = imageSrc ? 
+        `<img src="${imageSrc}" alt="${title}">` :
+        `<div class="game-launch-placeholder">${title}</div>`;
       
-      gameIframe.src = 'games/' + game.name;
-      gameView.classList.add('active');
+      ghostImage.innerHTML = imageHTML;
+      mainImage.innerHTML = imageHTML;
+
+      // Show launch screen
+      launchScreen.classList.add('active');
+      launchScreen.classList.add('game-launch-fade');
+
+      // Show branding screen after launch animation
+      setTimeout(() => {
+        brandingScreen.classList.add('active');
+      }, 2300);
+
+      // Load the game after all animations
+      setTimeout(() => {
+        const gameView = document.getElementById('game-view');
+        const gameIframe = document.getElementById('game-iframe');
+        const gameHeader = document.getElementById('game-header');
+        const gameBottomBar = document.getElementById('game-bottom-bar');
+        
+        gameIframe.src = 'games/' + game.name;
+        gameView.classList.add('active');
+        
+        // Show header after a delay
+        setTimeout(() => {
+          gameHeader.classList.add('show');
+        }, 800);
+        
+        // Show and fade out bottom bar
+        gameBottomBar.classList.add('show');
+
+        // Clean up launch screens
+        launchScreen.classList.remove('active');
+        brandingScreen.classList.remove('active');
+      }, 4800);
     }
 
     // Sidebar toggle
@@ -645,8 +852,10 @@
 
     // Remove startup screens after animation
     setTimeout(() => {
-      document.querySelector('.startup-screen').remove();
-      document.querySelector('.branding-screen').remove();
+      const startupScreen = document.querySelector('.startup-screen');
+      const brandingScreen = document.querySelector('.branding-screen');
+      if (startupScreen) startupScreen.remove();
+      if (brandingScreen) brandingScreen.remove();
     }, 5000);
 
     document.addEventListener('DOMContentLoaded', discoverGames);
