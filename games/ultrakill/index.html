@@ -11,22 +11,15 @@
     </style>
 </head>
 <body>
-    <iframe id="frame" src="https://html-classic.itch.zone/html/15139480/ultrakill/index.html"></iframe>
+    <iframe id="frame"></iframe>
     <script>
-        function setUserAgent(window, userAgent) {
-            if (window.navigator.userAgent != userAgent) {
-                var userAgentProp = { get: function() { return userAgent; } };
-                try {
-                    Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
-                } catch (e) {
-                    window.navigator = Object.create(navigator, { userAgent: userAgentProp });
-                }
-            }
-        }
-
-        document.getElementById("frame").addEventListener("load", function() {
-            setUserAgent(this.contentWindow, "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Mobile Safari/537.36");
-        });
+        var frame = document.getElementById("frame");
+        frame.contentDocument.open();
+        frame.contentDocument.write(`<script>
+            Object.defineProperty(navigator, 'userAgent', { get: function() { return "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Mobile Safari/537.36"; } });
+        <\/script>`);
+        frame.contentDocument.close();
+        frame.src = "https://html-classic.itch.zone/html/15139480/ultrakill/index.html";
     </script>
 </body>
 </html>
