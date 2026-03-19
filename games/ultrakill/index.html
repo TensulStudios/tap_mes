@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
+<html lang="en-us"><head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<<<<<<< HEAD
     <title>Unity WebGL Player | ULTRAKILL WEB PORT</title>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
@@ -38,3 +37,24 @@
     </script>
   </body>
 </html>
+=======
+    <title>Unity WebGL Player | ULTRAKILL</title>
+    <link rel="shortcut icon" href="/games/ultrakill/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="/games/ultrakill/TemplateData/style.css">
+    <script src="/games/ultrakill/TemplateData/UnityProgress.js"></script>
+    <script src="/games/ultrakill/Build/UnityLoader.js"></script>
+    <script>
+      var unityInstance = UnityLoader.instantiate("unityContainer", "/games/ultrakill/Build/ultrakill.json", {onProgress: UnityProgress});
+    </script>
+  </head>
+  <body>
+    <div class="webgl-content">
+      <div id="unityContainer" style="width: 960px; height: 600px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+        <div class="title">ULTRAKILL</div>
+      </div>
+    </div>
+  </body></html>
+>>>>>>> 348bfc7f3f1ff7b10d6dc18bafa7c9d2b3ee6465
