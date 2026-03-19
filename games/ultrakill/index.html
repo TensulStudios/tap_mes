@@ -13,19 +13,9 @@
 <body>
     <iframe id="frame" src="https://html-classic.itch.zone/html/15139480/ultrakill/index.html" allowfullscreen></iframe>
     <script>
-        var interval = setInterval(function() {
-            try {
-                var canvas = document.getElementById("frame").contentDocument.querySelector("#unity-canvas");
-                if (!canvas) return;
-                canvas.style.width = "100%";
-                canvas.style.height = "100%";
-                canvas.style.position = "fixed";
-                canvas.style.top = "0";
-                canvas.style.left = "0";
-                document.getElementById("frame").contentDocument.body.style.margin = "0";
-                clearInterval(interval);
-            } catch(e) {}
-        }, 500);
+        window.addEventListener("keydown", function(e) {
+            if (e.ctrlKey || e.metaKey || e.altKey) e.preventDefault();
+        });
     </script>
 </body>
 </html>
