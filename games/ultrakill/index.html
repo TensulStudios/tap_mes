@@ -11,15 +11,19 @@
     </style>
 </head>
 <body>
-    <iframe id="frame"></iframe>
+    <iframe id="frame" src="https://html-classic.itch.zone/html/15139480/ultrakill/index.html" allowfullscreen></iframe>
     <script>
-        var frame = document.getElementById("frame");
-        frame.contentDocument.open();
-        frame.contentDocument.write(`<script>
-            Object.defineProperty(navigator, 'userAgent', { get: function() { return "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Mobile Safari/537.36"; } });
-        <\/script>`);
-        frame.contentDocument.close();
-        frame.src = "https://html-classic.itch.zone/html/15139480/ultrakill/index.html";
+        document.getElementById("frame").addEventListener("load", function() {
+            try {
+                var canvas = this.contentDocument.querySelector("#unity-canvas");
+                canvas.style.width = "100%";
+                canvas.style.height = "100%";
+                canvas.style.position = "fixed";
+                this.contentDocument.body.style.textAlign = "left";
+            } catch(e) {
+                console.warn("Could not access iframe contents (cross-origin):", e);
+            }
+        });
     </script>
 </body>
 </html>
