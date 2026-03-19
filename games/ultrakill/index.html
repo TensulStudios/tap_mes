@@ -13,17 +13,19 @@
 <body>
     <iframe id="frame" src="https://html-classic.itch.zone/html/15139480/ultrakill/index.html" allowfullscreen></iframe>
     <script>
-        document.getElementById("frame").addEventListener("load", function() {
+        var interval = setInterval(function() {
             try {
-                var canvas = this.contentDocument.querySelector("#unity-canvas");
+                var canvas = document.getElementById("frame").contentDocument.querySelector("#unity-canvas");
+                if (!canvas) return;
                 canvas.style.width = "100%";
                 canvas.style.height = "100%";
                 canvas.style.position = "fixed";
-                this.contentDocument.body.style.textAlign = "left";
-            } catch(e) {
-                console.warn("Could not access iframe contents (cross-origin):", e);
-            }
-        });
+                canvas.style.top = "0";
+                canvas.style.left = "0";
+                document.getElementById("frame").contentDocument.body.style.margin = "0";
+                clearInterval(interval);
+            } catch(e) {}
+        }, 500);
     </script>
 </body>
 </html>
