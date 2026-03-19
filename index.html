@@ -19,6 +19,7 @@
       overflow: hidden;
     }
 
+    /* Startup Animation */
     .startup-screen {
       position: fixed;
       top: 0;
@@ -57,8 +58,14 @@
     }
 
     @keyframes ghostFade {
-      0% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.3); }
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.3);
+      }
     }
 
     .startup-fade {
@@ -66,7 +73,9 @@
     }
 
     @keyframes startupFadeOut {
-      to { opacity: 0; }
+      to {
+        opacity: 0;
+      }
     }
 
     .branding-screen {
@@ -82,11 +91,16 @@
     }
 
     @keyframes brandingAppear {
-      to { opacity: 1; }
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes brandingFadeOut {
-      to { opacity: 0; pointer-events: none; }
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
     }
 
     .branding-bar {
@@ -112,10 +126,17 @@
     }
 
     @keyframes textSlideIn {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
+    /* Game Launch Animation */
     .game-launch-screen {
       position: fixed;
       top: 0;
@@ -175,8 +196,14 @@
     }
 
     @keyframes gameLaunchGhostFade {
-      0% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.4); }
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.4);
+      }
     }
 
     .game-launch-fade {
@@ -184,7 +211,9 @@
     }
 
     @keyframes gameLaunchFadeOut {
-      to { opacity: 0; }
+      to {
+        opacity: 0;
+      }
     }
 
     .game-branding-screen {
@@ -205,11 +234,16 @@
     }
 
     @keyframes gameBrandingAppear {
-      to { opacity: 1; }
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes gameBrandingFadeOut {
-      to { opacity: 0; pointer-events: none; }
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
     }
 
     .game-branding-bar {
@@ -235,10 +269,17 @@
     }
 
     @keyframes gameBrandingTextSlideIn {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
+    /* Main Console UI */
     .console-screen {
       width: 100vw;
       height: 100vh;
@@ -249,12 +290,65 @@
     }
 
     @keyframes mainFadeIn {
-      to { opacity: 1; }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(10, 10, 10, 0.3);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .status-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      fill: rgba(255, 255, 255, 0.8);
     }
 
     .content-area {
       position: absolute;
-      top: 0;
+      top: 60px;
       left: 0;
       right: 0;
       bottom: 0;
@@ -372,6 +466,7 @@
       color: rgba(255, 255, 255, 0.6);
     }
 
+    /* Game View */
     .game-view {
       position: fixed;
       top: 0;
@@ -408,7 +503,9 @@
     }
 
     @keyframes headerFadeIn {
-      to { opacity: 1; }
+      to {
+        opacity: 1;
+      }
     }
 
     .game-header-text {
@@ -508,7 +605,9 @@
     }
 
     @keyframes bottomBarFadeOut {
-      to { opacity: 0; }
+      to {
+        opacity: 0;
+      }
     }
 
     @media (max-width: 768px) {
@@ -531,6 +630,7 @@
   </style>
 </head>
 <body>
+  <!-- Initial Startup Animation -->
   <div class="startup-screen startup-fade">
     <div class="startup-logo-container">
       <div class="startup-logo ghost">tOS</div>
@@ -544,6 +644,7 @@
     </div>
   </div>
 
+  <!-- Game Launch Animation -->
   <div class="game-launch-screen" id="game-launch-screen">
     <div class="game-launch-image-container">
       <div class="game-launch-image ghost" id="game-launch-ghost"></div>
@@ -557,9 +658,25 @@
     </div>
   </div>
 
+  <!-- Main Console UI -->
   <div class="console-screen">
+    <div class="top-bar">
+      <div class="status-section">
+        <span id="current-time">9:27 AM</span>
+        <div class="battery-icon">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zm-1 14.67h-5.33v-11h5.33v11z"/>
+          </svg>
+        </div>
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+        </svg>
+      </div>
+    </div>
+
     <div class="content-area">
       <div id="loading" class="loading">Loading Games...</div>
+      
       <div class="games-grid" id="games-grid"></div>
     </div>
   </div>
@@ -576,12 +693,24 @@
   <script>
     let games = [];
 
+    function updateTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      document.getElementById('current-time').textContent = `${hours}:${minutes} ${ampm}`;
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000);
+
     async function discoverGames() {
       const gamesGrid = document.getElementById('games-grid');
       const loadingElement = document.getElementById('loading');
 
       try {
-        const commonGameNames = ['minecraft', 'baldi', '2048', 'seffects', 'fnf', 'unlikely', 'stc', 'wbwwb', 'llp', 'hungrylamu', 'hungrylamu2', 'ultrakill'];
+        const commonGameNames = ['minecraft', 'baldi', '2048', 'seffects', 'fnf', 'unlikely', 'stc', 'wbwwb', 'llp', 'hungrylamu', 'hungrylamu2', 'ultrakll'];
         const foundGames = [];
 
         for (const gameName of commonGameNames) {
@@ -607,56 +736,7 @@
         games = foundGames;
 
         foundGames.forEach(game => {
-          const card = document.createElement('div');
-          card.className = 'game-card';
-          const title = game.title || game.name || 'Unknown Game';
-          const imageSrc = game.image || '';
-          card.innerHTML = `
-            <div class="game-card-inner">
-              <div class="game-image-container">
-                ${imageSrc ?
-                  `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
-                  `<div class="game-placeholder">${title}</div>`
-                }
-              </div>
-              <div class="game-info-section">
-                <div class="game-title">${title}</div>
-                <div class="game-publisher">${game.creator || 'Tames'}</div>
-              </div>
-            </div>
-          `;
-          card.addEventListener('click', () => {
-            const launchScreen = document.getElementById('game-launch-screen');
-            const brandingScreen = document.getElementById('game-branding-screen');
-            const imageHTML = imageSrc ?
-              `<img src="${imageSrc}" alt="${title}">` :
-              `<div class="game-launch-placeholder">${title}</div>`;
-
-            document.getElementById('game-launch-ghost').innerHTML = imageHTML;
-            document.getElementById('game-launch-main').innerHTML = imageHTML;
-
-            const gameIframe = document.getElementById('game-iframe');
-            gameIframe.src = 'games/' + game.name;
-
-            launchScreen.classList.add('active');
-            launchScreen.classList.add('game-launch-fade');
-
-            setTimeout(() => brandingScreen.classList.add('active'), 2300);
-
-            setTimeout(() => {
-              const gameView = document.getElementById('game-view');
-              const gameHeader = document.getElementById('game-header');
-
-              gameView.classList.add('active');
-
-              setTimeout(() => gameHeader.classList.add('show'), 800);
-
-              document.getElementById('game-bottom-bar').classList.add('show');
-
-              launchScreen.classList.remove('active');
-              brandingScreen.classList.remove('active');
-            }, 4800);
-          });
+          const card = createGameCard(game);
           gamesGrid.appendChild(card);
         });
       } catch (error) {
@@ -664,17 +744,88 @@
       }
     }
 
-    const sidebar = document.getElementById('game-sidebar');
+    function createGameCard(game) {
+      const card = document.createElement('div');
+      card.className = 'game-card';
 
-    document.addEventListener('click', (e) => {
-      if (sidebar.classList.contains('open') && !sidebar.contains(e.target)) {
-        sidebar.classList.remove('open');
-      }
-    });
+      const title = game.title || game.name || 'Unknown Game';
+      const imageSrc = game.image || '';
 
+      card.innerHTML = `
+        <div class="game-card-inner">
+          <div class="game-image-container">
+            ${imageSrc ? 
+              `<img src="${imageSrc}" alt="${title}" class="game-image" onerror="this.outerHTML='<div class=\\'game-placeholder\\'>${title}</div>'">` :
+              `<div class="game-placeholder">${title}</div>`
+            }
+          </div>
+          <div class="game-info-section">
+            <div class="game-title">${title}</div>
+            <div class="game-publisher">${game.creator || 'Tames'}</div>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        launchGame(game, imageSrc, title);
+      });
+
+      return card;
+    }
+
+    function launchGame(game, imageSrc, title) {
+      const launchScreen = document.getElementById('game-launch-screen');
+      const brandingScreen = document.getElementById('game-branding-screen');
+      const ghostImage = document.getElementById('game-launch-ghost');
+      const mainImage = document.getElementById('game-launch-main');
+
+      // Set up the launch animation with the game's image
+      const imageHTML = imageSrc ? 
+        `<img src="${imageSrc}" alt="${title}">` :
+        `<div class="game-launch-placeholder">${title}</div>`;
+      
+      ghostImage.innerHTML = imageHTML;
+      mainImage.innerHTML = imageHTML;
+
+      // Show launch screen
+      launchScreen.classList.add('active');
+      launchScreen.classList.add('game-launch-fade');
+
+      // Show branding screen after launch animation
+      setTimeout(() => {
+        brandingScreen.classList.add('active');
+      }, 2300);
+
+      // Load the game after all animations
+      setTimeout(() => {
+        const gameView = document.getElementById('game-view');
+        const gameIframe = document.getElementById('game-iframe');
+        const gameHeader = document.getElementById('game-header');
+        const gameBottomBar = document.getElementById('game-bottom-bar');
+        
+        gameIframe.src = 'games/' + game.name;
+        gameView.classList.add('active');
+        
+        // Show header after a delay
+        setTimeout(() => {
+          gameHeader.classList.add('show');
+        }, 800);
+        
+        // Show and fade out bottom bar
+        gameBottomBar.classList.add('show');
+
+        // Clean up launch screens
+        launchScreen.classList.remove('active');
+        brandingScreen.classList.remove('active');
+      }, 4800);
+    }
+
+    // Remove startup screens after animation
     setTimeout(() => {
-      document.querySelector('.startup-screen')?.remove();
-      document.querySelector('.branding-screen')?.remove();
+      const startupScreen = document.querySelector('.startup-screen');
+      const brandingScreen = document.querySelector('.branding-screen');
+      if (startupScreen) startupScreen.remove();
+      if (brandingScreen) brandingScreen.remove();
     }, 5000);
 
     document.addEventListener('DOMContentLoaded', discoverGames);
