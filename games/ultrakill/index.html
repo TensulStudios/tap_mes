@@ -13,9 +13,34 @@
 <body>
     <iframe id="frame" src="https://html-classic.itch.zone/html/15139480/ultrakill/index.html" allowfullscreen></iframe>
     <script>
-        window.addEventListener("keydown", function(e) {
-            if (e.ctrlKey || e.metaKey || e.altKey) e.preventDefault();
-        });
+        // Source - https://stackoverflow.com/a/24764878
+        // Posted by Korvo, modified by community. See post 'Timeline' for change history
+        // Retrieved 2026-03-19, License - CC BY-SA 4.0
+        
+        window.onbeforeunload = function (e) {
+            // Cancel the event
+            e.preventDefault();
+        
+            // Chrome requires returnValue to be set
+            e.returnValue = 'Really want to quit the game?';
+        };
+        
+        //Prevent Ctrl+S (and Ctrl+W for old browsers and Edge)
+        document.onkeydown = function (e) {
+            e = e || window.event;//Get event
+        
+            if (!e.ctrlKey) return;
+        
+            var code = e.which || e.keyCode;//Get key code
+        
+            switch (code) {
+                case 83://Block Ctrl+S
+                case 87://Block Ctrl+W -- Not work in Chrome and new Firefox
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+            }
+        };
     </script>
 </body>
 </html>
