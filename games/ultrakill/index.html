@@ -6,12 +6,12 @@
     <title>ULTRAKILL Prelude DEMO</title>
     <style>
         iframe {
-            position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;
+            position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; background-color: black; padding:0; overflow:hidden; z-index:999999;
         }
     </style>
 </head>
 <body>
-    <iframe id="frame"></iframe>
+    <iframe id="frame" allowfullscreen></iframe>
     <script>
         var frame = document.getElementById("frame");
         frame.contentDocument.open();
@@ -20,6 +20,24 @@
         <\/script>`);
         frame.contentDocument.close();
         frame.src = "https://html-classic.itch.zone/html/15139480/ultrakill/index.html";
+
+        window.onbeforeunload = function (e) {
+            e.preventDefault();
+            e.returnValue = 'Really want to quit the game?';
+        };
+
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (!e.ctrlKey) return;
+            var code = e.which || e.keyCode;
+            switch (code) {
+                case 83:
+                case 87:
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+            }
+        };
     </script>
 </body>
 </html>
