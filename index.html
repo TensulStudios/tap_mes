@@ -1295,8 +1295,10 @@
         settingsButton?.addEventListener('click', showLibrary);
         const homeworkNudge = document.querySelector('#homework-nudge');
         const dismissHomeworkNudge = () => homeworkNudge.classList.add('homework-nudge-dismissed');
+        const changeText = () => document.querySelector(".homework-nudge-text").textContent = "press L to instantly snap back to the main page";
         document.querySelector('#homework-nudge-dismiss').addEventListener('click', dismissHomeworkNudge);
-        setTimeout(dismissHomeworkNudge, 3000);
+        setTimeout(changeText, 3000);
+        setTimeout(dismissHomeworkNudge, 6000);
         document.querySelector('#game-player-home').addEventListener('click', showRoot);
         document.querySelector('#game-player-back').addEventListener('click', showGameList);
         fullscreenButton.addEventListener('click', toggleGameFullscreen);
