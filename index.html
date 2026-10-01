@@ -790,10 +790,19 @@
     #game-library ._PageGradient_1qeyl_9, #game-library ._Content_wakoh_7 { height: 100%; min-height: 0; }
     #game-library ._MainContent_1qeyl_40 { height: 100%; min-height: 0; overflow: hidden; }
     #game-library ._MaxWidth_1qeyl_45 { display: flex; flex-direction: column; height: 100%; min-height: 0; }
-    #game-picker { display: flex; flex: 1; min-height: 0; }
+    #game-picker { display: flex; flex: 1; min-height: 0; flex-direction: column; }
+    .games-library-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; padding: 0 2px 12px; }
+    .games-library-field { display: flex; min-width: 170px; flex: 1 1 170px; flex-direction: column; gap: 4px; color: #526b6d; font-size: 12px; font-weight: 600; }
+    .games-library-field input, .games-library-field select { box-sizing: border-box; width: 100%; min-height: 40px; padding: 0 10px; border: 1px solid #cbd9d6; border-radius: 4px; color: #183236; background: #fff; font: inherit; font-size: 14px; }
+    .games-library-field input:focus, .games-library-field select:focus { outline: 2px solid #16877d; outline-offset: 1px; }
+    .games-library-actions { display: flex; gap: 8px; }
+    .games-library-action { min-height: 40px; padding: 0 12px; border: 1px solid #a9bcba; border-radius: 4px; color: #183236; background: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .games-library-action:hover { border-color: #187b75; background: #e3f2ef; }
+    #game-library-status { min-height: 18px; margin: 0; color: #526b6d; font-size: 12px; }
+    #game-library-status:empty { display: none; }
     #game-list {
       display: grid;
-      flex: 1;
+      flex: 1 1 auto;
       min-height: 0;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       align-content: start;
@@ -801,6 +810,7 @@
       overflow: auto;
       padding: 2px;
     }
+    #game-list-empty { grid-column: 1 / -1; padding: 28px 12px; color: #526b6d; text-align: center; }
     .game-library-card {
       display: flex;
       align-items: center;
@@ -818,7 +828,9 @@
       cursor: pointer;
     }
     .game-library-card:hover { border-color: #187b75; background: #e3f2ef; }
-    .game-library-card > span:last-child { display: -webkit-box; min-width: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .game-library-card-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 4px; }
+    .game-library-card-title { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .game-library-card-meta { color: #617778; font-size: 11px; font-weight: 400; line-height: 1.3; }
     .game-library-icon-wrap { display: grid; flex: 0 0 54px; width: 54px; height: 54px; overflow: hidden; place-items: center; border-radius: 4px; background: #e1ebe8; }
     .game-library-icon { width: 100%; height: 100%; object-fit: cover; }
     .game-library-icon-fallback { display: grid; width: 100%; height: 100%; place-items: center; color: #fff; background: var(--game-icon-color); font-size: 22px; font-weight: 700; }
@@ -1130,6 +1142,23 @@
           { slug: "what_body", title: "what body?", image: "games/what_body/image.png" },
           { slug: "when_twilight_strikes", title: "When Twilight Strikes", image: "games/when_twilight_strikes/image.png" }
         ];
+        const gameLibraryStorageKey = 'tap-mes:game-library-v1';
+        let gameSort = 'name';
+        let gameStats = {};
+        try {
+          const savedLibrary = JSON.parse(localStorage.getItem(gameLibraryStorageKey) || 'null');
+          if (savedLibrary?.version === 1 && savedLibrary.games && typeof savedLibrary.games === 'object') {
+            gameSort = ['name', 'recent', 'hours'].includes(savedLibrary.sort) ? savedLibrary.sort : 'name';
+            games.forEach((game) => {
+              const saved = savedLibrary.games[game.slug];
+              if (!saved || !Number.isFinite(saved.playedMs) || saved.playedMs < 0) return;
+              gameStats[game.slug] = {
+                playedMs: saved.playedMs,
+                lastPlayedAt: Number.isFinite(saved.lastPlayedAt) ? saved.lastPlayedAt : null
+              };
+            });
+          }
+        } catch (error) {}
         const root = document.querySelector('#root');
         const gameLibrary = document.querySelector('#game-library');
         const gamePicker = document.querySelector('#game-picker');
@@ -1164,7 +1193,58 @@
         gamesCount.textContent = `${games.length} games`;
         gamesWelcomeText.append(gamesHeading, gamesCount);
         gamesWelcome.append(gamesWelcomeText);
-        gameMaxWidth.append(gamesWelcome, gamePicker, gamePlayer);
+        const libraryControls = document.createElement('div');
+        libraryControls.className = 'games-library-controls';
+        const searchField = document.createElement('label');
+        searchField.className = 'games-library-field';
+        searchField.append('Search games');
+        const gameSearch = document.createElement('input');
+        gameSearch.type = 'search';
+        gameSearch.id = 'game-library-search';
+        gameSearch.placeholder = 'Name';
+        gameSearch.autocomplete = 'off';
+        gameSearch.setAttribute('aria-label', 'Search games');
+        searchField.append(gameSearch);
+        const sortField = document.createElement('label');
+        sortField.className = 'games-library-field';
+        sortField.append('Sort by');
+        const gameSortSelect = document.createElement('select');
+        gameSortSelect.id = 'game-library-sort';
+        [['name', 'Name'], ['recent', 'Recently played'], ['hours', 'Hours played']].forEach(([value, label]) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = label;
+          gameSortSelect.append(option);
+        });
+        gameSortSelect.value = gameSort;
+        gameSortSelect.setAttribute('aria-label', 'Sort games');
+        sortField.append(gameSortSelect);
+        const libraryActions = document.createElement('div');
+        libraryActions.className = 'games-library-actions';
+        const exportBackupButton = document.createElement('button');
+        exportBackupButton.className = 'games-library-action';
+        exportBackupButton.type = 'button';
+        exportBackupButton.textContent = 'Save backup';
+        const importBackupButton = document.createElement('button');
+        importBackupButton.className = 'games-library-action';
+        importBackupButton.type = 'button';
+        importBackupButton.textContent = 'Load backup';
+        const backupFileInput = document.createElement('input');
+        backupFileInput.type = 'file';
+        backupFileInput.accept = 'application/json,.json';
+        backupFileInput.hidden = true;
+        libraryActions.append(exportBackupButton, importBackupButton, backupFileInput);
+        const libraryStatus = document.createElement('p');
+        libraryStatus.id = 'game-library-status';
+        libraryStatus.setAttribute('role', 'status');
+        libraryStatus.setAttribute('aria-live', 'polite');
+        libraryControls.append(searchField, sortField, libraryActions, libraryStatus);
+        const emptyState = document.createElement('p');
+        emptyState.id = 'game-list-empty';
+        emptyState.textContent = 'No games match your search.';
+        emptyState.hidden = true;
+        gameMaxWidth.append(gamesWelcome, libraryControls, gamePicker, gamePlayer);
+        gamePicker.insertBefore(emptyState, gameList);
         gameMainContent.replaceChildren(gameMaxWidth);
         gamePage.querySelector('._Sidebar_wakoh_152').replaceWith(gameSidebar);
         gameLibrary.replaceChildren(gameBanner, gamePage);
@@ -1183,7 +1263,19 @@
         });
 
         const iconColors = ['#267c76', '#bd684e', '#47749a', '#a0833d', '#755b8e', '#46755c'];
-        games.sort((first, second) => first.title.localeCompare(second.title)).forEach((game) => {
+        const gameCards = new Map();
+        let activeGameSlug = null;
+        let activePlayStartedAt = null;
+        let playtimeInterval = null;
+        const formatPlaytime = (playedMs) => {
+          const minutes = Math.floor(playedMs / 60000);
+          if (minutes < 60) return `${minutes} min played`;
+          const hours = Math.floor(minutes / 60);
+          const remainingMinutes = minutes % 60;
+          return remainingMinutes ? `${hours} hr ${remainingMinutes} min played` : `${hours} hr played`;
+        };
+        const lastPlayedFormatter = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+        const createGameCard = (game) => {
           const title = game.title;
           const button = document.createElement('button');
           button.className = 'game-library-card';
@@ -1207,22 +1299,170 @@
           } else {
             iconWrap.append(fallbackIcon);
           }
+          const copy = document.createElement('span');
+          copy.className = 'game-library-card-copy';
           const label = document.createElement('span');
+          label.className = 'game-library-card-title';
           label.textContent = title;
-          button.append(iconWrap, label);
+          const playtime = document.createElement('span');
+          playtime.className = 'game-library-card-meta';
+          const lastPlayed = document.createElement('span');
+          lastPlayed.className = 'game-library-card-meta';
+          copy.append(label, playtime, lastPlayed);
+          button.append(iconWrap, copy);
           button.addEventListener('click', () => {
             gameTitle.textContent = title;
             gameFrame.src = `games/${game.slug}/index.html`;
             gamePicker.hidden = true;
             gamePlayer.hidden = false;
+            startGameSession(game.slug);
             showGameToolbar();
           });
-          gameList.append(button);
-        });
+          gameCards.set(game.slug, { button, playtime, lastPlayed });
+        };
+        const renderGameList = () => {
+          const query = gameSearch.value.trim().toLocaleLowerCase();
+          const visibleGames = games.filter((game) => `${game.title} ${game.slug}`.toLocaleLowerCase().includes(query));
+          visibleGames.sort((first, second) => {
+            const firstStats = gameStats[first.slug] || { playedMs: 0, lastPlayedAt: null };
+            const secondStats = gameStats[second.slug] || { playedMs: 0, lastPlayedAt: null };
+            if (gameSort === 'recent') {
+              const recentOrder = (secondStats.lastPlayedAt || 0) - (firstStats.lastPlayedAt || 0);
+              if (recentOrder) return recentOrder;
+            }
+            if (gameSort === 'hours') {
+              const playtimeOrder = secondStats.playedMs - firstStats.playedMs;
+              if (playtimeOrder) return playtimeOrder;
+            }
+            return first.title.localeCompare(second.title);
+          });
+          gameList.replaceChildren();
+          visibleGames.forEach((game) => {
+            const card = gameCards.get(game.slug);
+            const stats = gameStats[game.slug] || { playedMs: 0, lastPlayedAt: null };
+            card.playtime.textContent = formatPlaytime(stats.playedMs);
+            card.lastPlayed.textContent = stats.lastPlayedAt
+              ? `Last played ${lastPlayedFormatter.format(new Date(stats.lastPlayedAt))}`
+              : 'Not played yet';
+            gameList.append(card.button);
+          });
+          gameList.append(emptyState);
+          emptyState.hidden = visibleGames.length > 0;
+        };
+        const saveGameLibraryData = () => {
+          try {
+            localStorage.setItem(gameLibraryStorageKey, JSON.stringify({
+              version: 1,
+              sort: gameSort,
+              games: gameStats
+            }));
+            return true;
+          } catch (error) {
+            libraryStatus.textContent = 'Browser storage is unavailable. Save a backup file to keep this history.';
+            return false;
+          }
+        };
+        const flushPlaytime = () => {
+          if (!activeGameSlug || activePlayStartedAt === null) return;
+          const now = Date.now();
+          const elapsed = Math.max(0, now - activePlayStartedAt);
+          const stats = gameStats[activeGameSlug] || { playedMs: 0, lastPlayedAt: now };
+          stats.playedMs += elapsed;
+          gameStats[activeGameSlug] = stats;
+          activePlayStartedAt = now;
+          saveGameLibraryData();
+          renderGameList();
+        };
+        const pauseGameSession = (forgetGame = false) => {
+          if (playtimeInterval !== null) {
+            clearInterval(playtimeInterval);
+            playtimeInterval = null;
+          }
+          flushPlaytime();
+          activePlayStartedAt = null;
+          if (forgetGame) activeGameSlug = null;
+        };
+        games.forEach(createGameCard);
+        renderGameList();
 
         let toolbarHideTimer;
         let pointerNearGameTop = false;
         const isGamePlayerActive = () => root.hidden && !gameLibrary.hidden && gamePicker.hidden && !gamePlayer.hidden;
+        const resumeGameSession = () => {
+          if (!activeGameSlug || !isGamePlayerActive() || document.visibilityState !== 'visible' || activePlayStartedAt !== null) return;
+          activePlayStartedAt = Date.now();
+          const stats = gameStats[activeGameSlug] || { playedMs: 0, lastPlayedAt: null };
+          stats.lastPlayedAt = activePlayStartedAt;
+          gameStats[activeGameSlug] = stats;
+          saveGameLibraryData();
+          renderGameList();
+          playtimeInterval = setInterval(flushPlaytime, 10000);
+        };
+        const startGameSession = (slug) => {
+          pauseGameSession(true);
+          activeGameSlug = slug;
+          resumeGameSession();
+        };
+        gameSearch.addEventListener('input', renderGameList);
+        gameSortSelect.addEventListener('change', () => {
+          gameSort = gameSortSelect.value;
+          saveGameLibraryData();
+          renderGameList();
+        });
+        exportBackupButton.addEventListener('click', () => {
+          flushPlaytime();
+          const backup = {
+            version: 1,
+            exportedAt: new Date().toISOString(),
+            sort: gameSort,
+            games: Object.fromEntries(games.map((game) => {
+              const stats = gameStats[game.slug] || { playedMs: 0, lastPlayedAt: null };
+              return [game.slug, { title: game.title, ...stats }];
+            }))
+          };
+          const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }));
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = `tap-mes-game-library-${new Date().toISOString().slice(0, 10)}.json`;
+          link.click();
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+          libraryStatus.textContent = 'Game history backup saved.';
+        });
+        importBackupButton.addEventListener('click', () => backupFileInput.click());
+        backupFileInput.addEventListener('change', async () => {
+          const file = backupFileInput.files?.[0];
+          if (!file) return;
+          try {
+            const backup = JSON.parse(await file.text());
+            if (backup?.version !== 1 || !backup.games || typeof backup.games !== 'object' || Array.isArray(backup.games)) {
+              throw new Error('Unsupported backup format');
+            }
+            const importedStats = {};
+            games.forEach((game) => {
+              const saved = backup.games[game.slug];
+              if (!saved) return;
+              if (!Number.isFinite(saved.playedMs) || saved.playedMs < 0 || (saved.lastPlayedAt !== null && !Number.isFinite(saved.lastPlayedAt))) {
+                throw new Error('Invalid game statistics');
+              }
+              importedStats[game.slug] = { playedMs: saved.playedMs, lastPlayedAt: saved.lastPlayedAt };
+            });
+            gameStats = importedStats;
+            gameSort = ['name', 'recent', 'hours'].includes(backup.sort) ? backup.sort : 'name';
+            gameSortSelect.value = gameSort;
+            saveGameLibraryData();
+            renderGameList();
+            libraryStatus.textContent = `Loaded history for ${Object.keys(gameStats).length} games.`;
+          } catch (error) {
+            libraryStatus.textContent = 'Could not load that game history file.';
+          } finally {
+            backupFileInput.value = '';
+          }
+        });
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') resumeGameSession();
+          else pauseGameSession();
+        });
+        window.addEventListener('pagehide', () => pauseGameSession());
         const scheduleToolbarHide = () => {
           clearTimeout(toolbarHideTimer);
           if (!isGamePlayerActive()) return;
@@ -1275,9 +1515,13 @@
           gameLibrary.classList.remove('game-library-background');
           root.hidden = true;
           gameLibrary.hidden = false;
-          if (gamePicker.hidden && !gamePlayer.hidden) showGameToolbar();
+          if (gamePicker.hidden && !gamePlayer.hidden) {
+            resumeGameSession();
+            showGameToolbar();
+          }
         };
         const showRoot = () => {
+          pauseGameSession();
           clearTimeout(toolbarHideTimer);
           gamePlayer.classList.add('toolbar-hidden');
           exitGameFullscreen();
@@ -1287,6 +1531,7 @@
           root.hidden = false;
         };
         const showGameList = () => {
+          pauseGameSession(true);
           clearTimeout(toolbarHideTimer);
           exitGameFullscreen();
           gameFrame.removeAttribute('src');
