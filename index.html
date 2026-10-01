@@ -856,7 +856,7 @@
             <div class="_BannerSpacing_1etu5_29"><span></span></div>
             <div class="_BannerRight_1etu5_21">
                 <div class="_StudentInfoContainer_1etu5_69"><a class="_XPCount_1etu5_81" href="https://maths.sparx-learning.com/student/rewards">??,??? XP</a>
-                    <div class="_HiddenAt_gk0gx_1 _Sm_gk0gx_12 _StudentName_1etu5_75" contenteditable="true">John Doe</div>
+                    <div class="_HiddenAt_gk0gx_1 _Sm_gk0gx_12 _StudentName_1etu5_75" contenteditable="true" data-persist-key="student-name">John Doe</div>
                 </div>
                 <button class="_FocusTarget_1nxry_1 _NotificationsIconContainer_1p7b9_1" role="button" aria-label="Show Notifications" type="button" id="radix-_r_3_" aria-haspopup="menu" aria-expanded="false" data-state="closed"><img aria-hidden="true" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjQnIGhlaWdodD0nMjQnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cGF0aCBmaWxsLXJ1bGU9J2V2ZW5vZGQnIGNsaXAtcnVsZT0nZXZlbm9kZCcgZD0nTTYgMTBDNiA3LjM3NzM0IDcuNjgyNzEgNS4xNDc2OSAxMC4wMjc0IDQuMzMxOEMxMC4wMDk0IDQuMjIzODggMTAgNC4xMTMwNCAxMCA0QzEwIDIuODk1NDMgMTAuODk1NCAyIDEyIDJDMTMuMTA0NiAyIDE0IDIuODk1NDMgMTQgNEMxNCA0LjExMzA0IDEzLjk5MDYgNC4yMjM4OCAxMy45NzI2IDQuMzMxOEMxNi4zMTczIDUuMTQ3NjkgMTggNy4zNzczNCAxOCAxMFYxNUwyMSAxN1YxOEgxOEg2SDNWMTdMNiAxNVYxMFpNNy41IDE1VjE2LjVIMTYuNVYxNVYxMEMxNi41IDcuNTE0NzIgMTQuNDg1MyA1LjUgMTIgNS41QzkuNTE0NzIgNS41IDcuNSA3LjUxNDcyIDcuNSAxMFYxNVpNMTIgMjJDMTAuMzQzMSAyMiA5IDIwLjY1NjkgOSAxOUgxNUMxNSAyMC42NTY5IDEzLjY1NjkgMjIgMTIgMjJaJyBmaWxsPScjZmZmZmZmJy8+PC9zdmc+"></button>
                 <button
@@ -889,7 +889,7 @@
                     <div class="_MaxWidth_1qeyl_45">
                         <div class="_WelcomeBanner_4nqx1_1">
                             <div>
-                                <div class="_Hello_4nqx1_9" contenteditable="true">Hey John, (click this to change text)</div>
+                                <div class="_Hello_4nqx1_9" contenteditable="true" data-persist-key="homework-greeting">Hey John, (click this to change text)</div>
                                 <div class="_PackageTypeDescription_4nqx1_20">This is your personalised homework. You need to answer every question correctly to complete it.</div>
                             </div>
                             <div class="_ProgressWheelContainer_4nqx1_25">
@@ -1168,6 +1168,19 @@
         gameMainContent.replaceChildren(gameMaxWidth);
         gamePage.querySelector('._Sidebar_wakoh_152').replaceWith(gameSidebar);
         gameLibrary.replaceChildren(gameBanner, gamePage);
+
+        document.querySelectorAll('[contenteditable="true"][data-persist-key]').forEach((element) => {
+          const storageKey = `tap-mes:${element.dataset.persistKey}`;
+          try {
+            const savedText = localStorage.getItem(storageKey);
+            if (savedText !== null) element.textContent = savedText;
+          } catch (error) {}
+          element.addEventListener('input', () => {
+            try {
+              localStorage.setItem(storageKey, element.textContent);
+            } catch (error) {}
+          });
+        });
 
         const iconColors = ['#267c76', '#bd684e', '#47749a', '#a0833d', '#755b8e', '#46755c'];
         games.sort((first, second) => first.title.localeCompare(second.title)).forEach((game) => {
