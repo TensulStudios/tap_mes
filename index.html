@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; font-src data:; media-src data:; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: file:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; font-src data:; media-src data:; frame-src 'self' file:; form-action 'none'">
     <style lang="en" type="text/css" id="dark-mode-custom-style"></style>
     <style lang="en" type="text/css" id="dark-mode-native-style"></style>
     <style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
@@ -739,6 +739,79 @@
         div[data-alias="300x250 Ad 1"] { display: none !important; }
         body > .wrapper > .card-box > #step-1 { display: none !important; }
     </style>
+  <style>
+    #game-library {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--colours-page-background, #f1f6f4);
+      color: var(--colours-text-body, #183236);
+      font-family: 'DM Sans', sans-serif;
+    }
+    #game-library.game-library-background { opacity: 0.001; pointer-events: none; }
+    #root.game-background-overlay { position: relative; z-index: 10001; min-height: 100vh; background-color: var(--colours-page-background, #fff); }
+    #game-library[hidden], #game-picker[hidden], #game-player[hidden] { display: none; }
+    #game-library > ._TopBanner_1etu5_1 { flex: 0 0 auto; }
+    #game-library > ._PageBackground_1qeyl_1 { flex: 1 1 auto; width: 100%; height: auto; min-height: 0; }
+    #game-library ._PageGradient_1qeyl_9, #game-library ._Content_wakoh_7 { height: 100%; min-height: 0; }
+    #game-library ._MainContent_1qeyl_40 { height: 100%; min-height: 0; overflow: hidden; }
+    #game-library ._MaxWidth_1qeyl_45 { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+    #game-picker { display: flex; flex: 1; min-height: 0; }
+    #game-list {
+      display: grid;
+      flex: 1;
+      min-height: 0;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      align-content: start;
+      gap: 12px;
+      overflow: auto;
+      padding: 2px;
+    }
+    .game-library-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      min-height: 76px;
+      padding: 10px;
+      border: 1px solid #d1dcda;
+      border-radius: 4px;
+      color: #183236;
+      background: #fff;
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+    }
+    .game-library-card:hover { border-color: #187b75; background: #e3f2ef; }
+    .game-library-card > span:last-child { display: -webkit-box; min-width: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .game-library-icon-wrap { display: grid; flex: 0 0 54px; width: 54px; height: 54px; overflow: hidden; place-items: center; border-radius: 4px; background: #e1ebe8; }
+    .game-library-icon { width: 100%; height: 100%; object-fit: cover; }
+    .game-library-icon-fallback { display: grid; width: 100%; height: 100%; place-items: center; color: #fff; background: var(--game-icon-color); font-size: 22px; font-weight: 700; }
+    #game-player { position: relative; display: flex; flex: 1; min-height: 0; flex-direction: column; overflow: hidden; background: #111c20; }
+    #game-player:fullscreen { width: 100vw; height: 100vh; max-width: none; max-height: none; }
+    .game-player-bar { position: absolute; z-index: 2; top: 0; left: 0; right: 0; display: flex; height: 54px; box-sizing: border-box; align-items: center; gap: 12px; padding: 0 12px; color: #183236; background: #fff; transform: translateY(0); transition: transform 220ms ease; }
+    .game-player-bar::after { position: absolute; bottom: 0; left: 50%; width: 44px; height: 3px; border-radius: 2px; background: #187b75; content: ''; opacity: 0; transform: translateX(-50%); }
+    #game-player.toolbar-hidden .game-player-bar { transform: translateY(calc(-100% + 12px)); }
+    #game-player.toolbar-hidden .game-player-bar::after { opacity: 1; }
+    .game-player-button { min-height: 38px; padding: 0 13px; border: 1px solid #a9bcba; border-radius: 4px; color: #183236; background: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+    .game-player-button:hover { background: #e3f2ef; }
+    .game-player-fullscreen { display: grid; width: 40px; min-height: 38px; padding: 0; place-items: center; }
+    .game-player-fullscreen svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+    .game-player-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+    #game-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+    @media (prefers-reduced-motion: reduce) { .game-player-bar { transition: none; } }
+    @media (max-width: 600px) {
+      #game-list { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+      .game-library-card { min-height: 68px; gap: 9px; padding: 7px; }
+      .game-library-icon-wrap { flex-basis: 48px; width: 48px; height: 48px; }
+      .game-player-bar { gap: 7px; padding: 0 7px; }
+      .game-player-button { padding: 0 9px; }
+    }
+  </style>
 </head>
 
 <body data-school-id="e119057c-eeed-4eb2-930c-ae5e9f55ac3b">
@@ -845,6 +918,23 @@
     </div>
     </div>
 
+    <section id="game-library" hidden aria-label="Game library">
+      <div id="game-picker">
+        <div id="game-list" aria-label="Available games"></div>
+      </div>
+      <div id="game-player" hidden>
+        <header class="game-player-bar">
+          <button class="game-player-button" id="game-player-back" type="button">Games</button>
+          <span class="game-player-title" id="game-player-title"></span>
+          <button class="game-player-button game-player-fullscreen" id="game-player-fullscreen" type="button" aria-label="Enter fullscreen" title="Enter fullscreen">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path id="game-player-fullscreen-icon" d="M9 3H5a2 2 0 0 0-2 2v4m12-6h4a2 2 0 0 1 2 2v4M3 15v4a2 2 0 0 0 2 2h4m6 0h4a2 2 0 0 0 2-2v-4"></path></svg>
+          </button>
+          <button class="game-player-button" id="game-player-home" type="button" title="Return home (L)">Home</button>
+        </header>
+        <iframe id="game-frame" title="Selected game" allow="autoplay; fullscreen; gamepad"></iframe>
+      </div>
+    </section>
+
     <script>
       (() => {
         document.querySelector('._XPCount_1etu5_81').textContent = Math.floor(Math.random() * 30001 + 20000).toLocaleString('en-US') + ' XP';
@@ -939,6 +1029,259 @@
         if (olderHomework?.lastChild) {
           olderHomework.lastChild.textContent = `Older homework (0/${dates.length})`;
         }
+
+        const games = [
+          { slug: "13_bones", title: "13 Bones", image: "games/13_bones/image.png" },
+          { slug: "2048", title: "2048", image: "games/2048/image.png" },
+          { slug: "a_mirror_s_curse_sfw", title: "A Mirror's Curse SFW", image: "games/a_mirror_s_curse_sfw/image.png" },
+          { slug: "a_tale_of_crowns", title: "A Tale of Crowns", image: "games/a_tale_of_crowns/image.png" },
+          { slug: "access_danied_demo", title: "Access DAnied DEMO", image: "games/access_danied_demo/image.png" },
+          { slug: "another_home", title: "Another Home", image: "games/another_home/image.png" },
+          { slug: "b_e_e_t_l_e", title: "b-e-e-t-l-e", image: "games/b_e_e_t_l_e/image.png" },
+          { slug: "baldi", title: "Baldi's Basics", image: "games/baldi/baldi.png" },
+          { slug: "cobb_can_move", title: "COBB CAN MOVE", image: "games/cobb_can_move/image.png" },
+          { slug: "death_loop_a_danganronpa_inspired_game", title: "Death Loop [A Danganronpa-inspired Game]", image: "games/death_loop_a_danganronpa_inspired_game/image.png" },
+          { slug: "deltarune_lightners_live_plus", title: "Deltarune: Lightners Live Plus", image: "games/deltarune_lightners_live_plus/image.png" },
+          { slug: "demon_bluff", title: "Demon Bluff", image: "games/demon_bluff/image.png" },
+          { slug: "different_strokes", title: "Different Strokes", image: "games/different_strokes/image.png" },
+          { slug: "dragonsweeper", title: "Dragonsweeper", image: "games/dragonsweeper/image.png" },
+          { slug: "dungeon_mori", title: "Dungeon Mori", image: "games/dungeon_mori/image.png" },
+          { slug: "dungeons_degenerate_gamblers", title: "Dungeons & Degenerate Gamblers", image: "games/dungeons_degenerate_gamblers/image.png" },
+          { slug: "family", title: "Family", image: "games/family/image.png" },
+          { slug: "flesh_blood_concrete", title: "Flesh, Blood, & Concrete", image: "games/flesh_blood_concrete/image.png" },
+          { slug: "fnf", title: "Friday Night Funkin", image: "games/fnf/image.png" },
+          { slug: "generic_fighter_maybe", title: "Generic Fighter Maybe", image: "games/generic_fighter_maybe/image.png" },
+          { slug: "george_and_the_printer", title: "George and the Printer", image: "games/george_and_the_printer/image.png" },
+          { slug: "glory_hunters", title: "Glory Hunters", image: "games/glory_hunters/image.png" },
+          { slug: "goodbye_doggy", title: "goodbye, doggy", image: "games/goodbye_doggy/image.png" },
+          { slug: "grovebound", title: "GroveBound", image: "games/grovebound/image.png" },
+          { slug: "her_trees_first_puzzle", title: "HER TREES : First Puzzle", image: "games/her_trees_first_puzzle/image.png" },
+          { slug: "honey_dress_up", title: "Honey Dress Up", image: "games/honey_dress_up/image.png" },
+          { slug: "hungrylamu", title: "Hungry Lamu", image: "games/hungrylamu/image.png" },
+          { slug: "hungrylamu2", title: "Hungry Lamu 2", image: "games/hungrylamu2/image.png" },
+          { slug: "incremental_survivors", title: "INCREMENTAL SURVIVORS", image: "games/incremental_survivors/image.png" },
+          { slug: "kidnapped_for_a_date", title: "Kidnapped For A Date", image: "games/kidnapped_for_a_date/image.png" },
+          { slug: "ktiabatg", title: "Kill The Ice Age Baby", image: "games/ktiabatg/image.png" },
+          { slug: "last_train_home", title: "Last Train Home", image: "games/last_train_home/image.png" },
+          { slug: "little_chef_demo", title: "Little Chef: Demo", image: "games/little_chef_demo/image.png" },
+          { slug: "llp", title: "Lightners Live Plus", image: "games/llp/image.png" },
+          { slug: "minecraft", title: "EaglerCraftX", image: "games/minecraft/image.png" },
+          { slug: "opossum_country", title: "Opossum Country", image: "games/opossum_country/image.png" },
+          { slug: "purrgatory", title: "purrgatory", image: "games/purrgatory/image.png" },
+          { slug: "red_handed", title: "Red Handed", image: "games/red_handed/image.png" },
+          { slug: "scale_the_depths_now_on_steam", title: "Scale the Depths (Now on Steam!)", image: "games/scale_the_depths_now_on_steam/image.png" },
+          { slug: "scritchy_scratchy", title: "Scritchy Scratchy", image: "games/scritchy_scratchy/image.png" },
+          { slug: "seffects", title: "SIDE EFFECTS", image: "games/seffects/image.png" },
+          { slug: "silver_thread", title: "Silver Thread", image: "games/silver_thread/image.png" },
+          { slug: "skinator", title: "SKINATOR", image: "games/skinator/image.png" },
+          { slug: "small_town_emo_demo", title: "Small Town Emo (demo)", image: "games/small_town_emo_demo/image.png" },
+          { slug: "soul_void", title: "Soul Void", image: "games/soul_void/image.png" },
+          { slug: "sovereign_tower", title: "Sovereign Tower", image: "games/sovereign_tower/image.png" },
+          { slug: "stc", title: "Sort the court", image: "games/stc/image.png" },
+          { slug: "taiyaki_fabulous_museum_of_fish", title: "Taiyaki Fabulous Museum of Fish", image: "games/taiyaki_fabulous_museum_of_fish/image.png" },
+          { slug: "template", title: "Template", image: null },
+          { slug: "the_margot_collapse", title: "The Margot Collapse", image: "games/the_margot_collapse/image.png" },
+          { slug: "the_ratchelor_a_rat_dating_sim", title: "The Ratchelor: A Rat Dating Sim", image: "games/the_ratchelor_a_rat_dating_sim/image.png" },
+          { slug: "the_roottrees_are_dead", title: "The Roottrees are Dead", image: "games/the_roottrees_are_dead/image.png" },
+          { slug: "the_world_is_doomed_unless_i_can_raise_my_power_level_to_1_000_000_and_confront_the_demon_lord", title: "The World Is Doomed Unless I Can Raise My Power Level to 1,000,000 and Confront the Demon Lord", image: "games/the_world_is_doomed_unless_i_can_raise_my_power_level_to_1_000_000_and_confront_the_demon_lord/image.png" },
+          { slug: "there_s_this_girl", title: "there's this girl", image: "games/there_s_this_girl/image.png" },
+          { slug: "trees_hate_you_demo", title: "Trees Hate You (demo)", image: "games/trees_hate_you_demo/image.png" },
+          { slug: "twilight_observer", title: "Twilight Observer", image: "games/twilight_observer/image.png" },
+          { slug: "ultrakill", title: "ULTRAKILL Prelude", image: "games/ultrakill/image.png" },
+          { slug: "unlikely", title: "Unlikely", image: "games/unlikely/image.png" },
+          { slug: "wayfarer", title: "Wayfarer", image: "games/wayfarer/image.png" },
+          { slug: "wbwwb", title: "WE BECOME WHAT WE BEHOLD", image: "games/wbwwb/image.png" },
+          { slug: "what_body", title: "what body?", image: "games/what_body/image.png" },
+          { slug: "when_twilight_strikes", title: "When Twilight Strikes", image: "games/when_twilight_strikes/image.png" }
+        ];
+        const root = document.querySelector('#root');
+        const gameLibrary = document.querySelector('#game-library');
+        const gamePicker = document.querySelector('#game-picker');
+        const gamePlayer = document.querySelector('#game-player');
+        const gameFrame = document.querySelector('#game-frame');
+        const gameTitle = document.querySelector('#game-player-title');
+        const gameToolbar = document.querySelector('.game-player-bar');
+        const fullscreenButton = document.querySelector('#game-player-fullscreen');
+        const fullscreenIcon = document.querySelector('#game-player-fullscreen-icon');
+        const gameList = document.querySelector('#game-list');
+        const gameSidebar = root.querySelector('._Sidebar_wakoh_152').cloneNode(true);
+        const gamePage = root.querySelector('._PageBackground_1qeyl_1').cloneNode(true);
+        const gameBanner = root.querySelector('._TopBanner_1etu5_1').cloneNode(true);
+        gameBanner.querySelectorAll('[id]').forEach((element) => element.removeAttribute('id'));
+        gameBanner.querySelector('._XPCount_1etu5_81').textContent = root.querySelector('._XPCount_1etu5_81').textContent;
+        const gameSidebarButtons = [...gameSidebar.querySelectorAll('._NavButton_wakoh_13')];
+        gameSidebarButtons[0]?.querySelector('._NavButtonLabel_wakoh_32')?.replaceChildren('Games');
+        const gameSidebarHome = gameSidebarButtons.find((button) => button.textContent.trim().endsWith('Settings'));
+        gameSidebarHome?.removeAttribute('onclick');
+        gameSidebarHome?.querySelector('._NavButtonLabel_wakoh_32')?.replaceChildren('Home');
+        const gameMainContent = gamePage.querySelector('._MainContent_1qeyl_40');
+        const gameMaxWidth = document.createElement('div');
+        gameMaxWidth.className = '_MaxWidth_1qeyl_45';
+        const gamesWelcome = document.createElement('div');
+        gamesWelcome.className = '_WelcomeBanner_4nqx1_1';
+        const gamesWelcomeText = document.createElement('div');
+        const gamesHeading = document.createElement('div');
+        gamesHeading.className = '_Hello_4nqx1_9';
+        gamesHeading.textContent = 'Games';
+        const gamesCount = document.createElement('div');
+        gamesCount.className = '_PackageTypeDescription_4nqx1_20';
+        gamesCount.textContent = `${games.length} games`;
+        gamesWelcomeText.append(gamesHeading, gamesCount);
+        gamesWelcome.append(gamesWelcomeText);
+        gameMaxWidth.append(gamesWelcome, gamePicker, gamePlayer);
+        gameMainContent.replaceChildren(gameMaxWidth);
+        gamePage.querySelector('._Sidebar_wakoh_152').replaceWith(gameSidebar);
+        gameLibrary.replaceChildren(gameBanner, gamePage);
+
+        const iconColors = ['#267c76', '#bd684e', '#47749a', '#a0833d', '#755b8e', '#46755c'];
+        games.sort((first, second) => first.title.localeCompare(second.title)).forEach((game) => {
+          const title = game.title;
+          const button = document.createElement('button');
+          button.className = 'game-library-card';
+          button.type = 'button';
+          const iconWrap = document.createElement('span');
+          iconWrap.className = 'game-library-icon-wrap';
+          const fallbackIcon = document.createElement('span');
+          fallbackIcon.className = 'game-library-icon-fallback';
+          fallbackIcon.setAttribute('aria-hidden', 'true');
+          fallbackIcon.textContent = title.charAt(0).toUpperCase() || '?';
+          const colorIndex = [...game.slug].reduce((total, character) => total + character.charCodeAt(0), 0) % iconColors.length;
+          fallbackIcon.style.setProperty('--game-icon-color', iconColors[colorIndex]);
+          if (game.image) {
+            const icon = document.createElement('img');
+            icon.className = 'game-library-icon';
+            icon.alt = '';
+            icon.loading = 'lazy';
+            icon.src = game.image;
+            icon.addEventListener('error', () => icon.replaceWith(fallbackIcon), { once: true });
+            iconWrap.append(icon);
+          } else {
+            iconWrap.append(fallbackIcon);
+          }
+          const label = document.createElement('span');
+          label.textContent = title;
+          button.append(iconWrap, label);
+          button.addEventListener('click', () => {
+            gameTitle.textContent = title;
+            gameFrame.src = `games/${game.slug}/index.html`;
+            gamePicker.hidden = true;
+            gamePlayer.hidden = false;
+            showGameToolbar();
+          });
+          gameList.append(button);
+        });
+
+        let toolbarHideTimer;
+        let pointerNearGameTop = false;
+        const isGamePlayerActive = () => root.hidden && !gameLibrary.hidden && gamePicker.hidden && !gamePlayer.hidden;
+        const scheduleToolbarHide = () => {
+          clearTimeout(toolbarHideTimer);
+          if (!isGamePlayerActive()) return;
+          toolbarHideTimer = setTimeout(() => {
+            toolbarHideTimer = null;
+            if (pointerNearGameTop || gameToolbar.matches(':hover')) return;
+            gamePlayer.classList.add('toolbar-hidden');
+          }, 2000);
+        };
+        const showGameToolbar = () => {
+          if (!isGamePlayerActive()) return;
+          clearTimeout(toolbarHideTimer);
+          gamePlayer.classList.remove('toolbar-hidden');
+          scheduleToolbarHide();
+        };
+        const handlePointerMove = (pointerY, fromGameFrame = false) => {
+          if (!isGamePlayerActive()) return;
+          if (fromGameFrame) {
+            pointerNearGameTop = pointerY <= 64;
+          } else {
+            const playerTop = gamePlayer.getBoundingClientRect().top;
+            pointerNearGameTop = pointerY >= playerTop && pointerY <= playerTop + 64;
+          }
+          if (pointerNearGameTop) showGameToolbar();
+          else if (!toolbarHideTimer && !gamePlayer.classList.contains('toolbar-hidden')) scheduleToolbarHide();
+        };
+
+        const updateFullscreenButton = () => {
+          const isFullscreen = document.fullscreenElement === gamePlayer;
+          fullscreenButton.setAttribute('aria-label', isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen');
+          fullscreenButton.title = isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen';
+          fullscreenIcon.setAttribute('d', isFullscreen
+            ? 'M3 8V5a2 2 0 0 1 2-2h3m8 0h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3'
+            : 'M9 3H5a2 2 0 0 0-2 2v4m12-6h4a2 2 0 0 1 2 2v4M3 15v4a2 2 0 0 0 2 2h4m6 0h4a2 2 0 0 0 2-2v-4');
+        };
+        const exitGameFullscreen = () => {
+          if (document.fullscreenElement === gamePlayer) document.exitFullscreen();
+        };
+        const toggleGameFullscreen = async () => {
+          try {
+            if (document.fullscreenElement === gamePlayer) await document.exitFullscreen();
+            else await gamePlayer.requestFullscreen();
+          } catch (error) {
+            showGameToolbar();
+          }
+        };
+
+        const showLibrary = () => {
+          root.classList.remove('game-background-overlay');
+          gameLibrary.classList.remove('game-library-background');
+          root.hidden = true;
+          gameLibrary.hidden = false;
+          if (gamePicker.hidden && !gamePlayer.hidden) showGameToolbar();
+        };
+        const showRoot = () => {
+          clearTimeout(toolbarHideTimer);
+          gamePlayer.classList.add('toolbar-hidden');
+          exitGameFullscreen();
+          gameLibrary.hidden = false;
+          gameLibrary.classList.add('game-library-background');
+          root.classList.add('game-background-overlay');
+          root.hidden = false;
+        };
+        const showGameList = () => {
+          clearTimeout(toolbarHideTimer);
+          exitGameFullscreen();
+          gameFrame.removeAttribute('src');
+          gamePlayer.classList.remove('toolbar-hidden');
+          gamePlayer.hidden = true;
+          gamePicker.hidden = false;
+        };
+        const returnToRootOnL = (event) => {
+          if (!root.hidden || gameLibrary.hidden) return;
+          if (event.key?.toLowerCase() !== 'l' || event.ctrlKey || event.altKey || event.metaKey) return;
+          event.preventDefault();
+          event.stopPropagation();
+          showRoot();
+        };
+
+        const settingsButton = [...document.querySelectorAll('._NavButton_wakoh_13')]
+          .find((button) => button.textContent.trim().endsWith('Settings'));
+        settingsButton?.removeAttribute('onclick');
+        settingsButton?.addEventListener('click', showLibrary);
+        document.querySelector('#game-player-home').addEventListener('click', showRoot);
+        document.querySelector('#game-player-back').addEventListener('click', showGameList);
+        fullscreenButton.addEventListener('click', toggleGameFullscreen);
+        gameToolbar.addEventListener('pointerenter', showGameToolbar);
+        gameToolbar.addEventListener('pointerleave', () => {
+          pointerNearGameTop = false;
+          scheduleToolbarHide();
+        });
+        document.addEventListener('pointermove', (event) => handlePointerMove(event.clientY));
+        document.addEventListener('fullscreenchange', () => {
+          updateFullscreenButton();
+          showGameToolbar();
+        });
+        gameSidebarHome?.addEventListener('click', showRoot);
+        window.addEventListener('keydown', (event) => {
+          if (!gameLibrary.hidden) returnToRootOnL(event);
+        });
+        gameFrame.addEventListener('load', () => {
+          try {
+            gameFrame.contentWindow.addEventListener('keydown', returnToRootOnL, true);
+            gameFrame.contentWindow.addEventListener('pointermove', (event) => handlePointerMove(event.clientY, true));
+          } catch (error) {
+            // Cross-origin games cannot expose their keyboard events to the parent.
+          }
+        });
       })();
     </script>
     <div class="spx-status-embed"></div>
