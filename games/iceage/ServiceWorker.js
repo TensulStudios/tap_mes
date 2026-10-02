@@ -1,9 +1,9 @@
 const cacheName = "DefaultCompany-Ice Age Baby Adventure-0.1";
 const contentToCache = [
     "Build/iceage.loader.js",
-    "Build/iceage.framework.js.gz",
-    "Build/iceage.data.gz",
-    "Build/iceage.wasm.gz",
+    "Build/iceage.framework.js",
+    "Build/iceage.data",
+    "Build/iceage.wasm",
     "TemplateData/style.css"
 
 ];
